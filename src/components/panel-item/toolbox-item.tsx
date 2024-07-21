@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Animations from './animations';
 import TextProps from './text';
 import Zap from './zap';
+import { ScrollArea } from '../ui/scroll-area';
 
 const Container = ({ children }: { children: React.ReactNode }) => {
   const { showToolboxItem, setShowToolboxItem, setActiveToolboxItem } =
@@ -32,9 +33,13 @@ const Container = ({ children }: { children: React.ReactNode }) => {
         transition: 'right 0.25s ease-in-out',
         zIndex: 200,
       }}
-      className="w-80  h-[calc(100%-32px)]  absolute top-1/2 -translate-y-1/2 rounded-lg shadow-lg flex"
+      className="w-80 h-[calc(100%-32px)]  absolute top-1/2 -translate-y-1/2 rounded-lg shadow-lg flex"
     >
-      <div className="flex-1 relative bg-zinc-950">{children}</div>
+      <div className="flex-1 relative bg-zinc-950">
+        <ScrollArea className="h-full w-full rounded-md border">
+          {children}
+        </ScrollArea>
+      </div>
     </div>
   );
 };
