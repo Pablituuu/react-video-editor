@@ -28,4 +28,4 @@ Install react-video-editor with npm
 ## Demo
 
 https://react-video-editor-mu.vercel.app/
-![Logo](image/image.png){width=50%}
+![Logo](image/image.png)
