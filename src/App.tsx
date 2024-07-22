@@ -1,31 +1,30 @@
-import { Timeline, Provider, Scene, useEditorState } from '@designcombo/core';
-import MenuList from './components/menu-list';
-import { MenuItem } from './components/menu-item';
-import { useEffect } from 'react';
-import useDataState from './store/use-data-state';
-import { getCompactFontData } from './utils/fonts';
-import { FONTS } from './data/fonts';
-import { Button } from './components/ui/button';
-import { Home } from 'lucide-react';
-import ControlItem from './components/control-item/item';
-import { ToolboxlItem } from './components/panel-item';
+import { Timeline, Provider, Scene, useEditorState } from "@designcombo/core";
+import MenuList from "./components/menu-list";
+import { MenuItem } from "./components/menu-item";
+import { useEffect } from "react";
+import useDataState from "./store/use-data-state";
+import { getCompactFontData } from "./utils/fonts";
+import { FONTS } from "./data/fonts";
+import { Button } from "./components/ui/button";
+import ControlItem from "./components/control-item/item";
+import { ToolboxlItem } from "./components/toolbox-item";
 
 export const theme = {
   colors: {
     gray: {
-      50: '#fafafa',
-      100: '#f4f4f5',
-      200: '#e4e4e7',
-      300: '#d4d4d8',
-      400: '#a1a1aa',
-      500: '#71717a',
-      600: '#52525b',
-      700: '#3f3f46',
-      800: '#27272a',
-      900: '#18181b',
-      950: '#09090b',
-      1000: '#040405',
-      1100: '#010101',
+      50: "#fafafa",
+      100: "#f4f4f5",
+      200: "#e4e4e7",
+      300: "#d4d4d8",
+      400: "#a1a1aa",
+      500: "#71717a",
+      600: "#52525b",
+      700: "#3f3f46",
+      800: "#27272a",
+      900: "#18181b",
+      950: "#09090b",
+      1000: "#040405",
+      1100: "#010101",
     },
   },
 };

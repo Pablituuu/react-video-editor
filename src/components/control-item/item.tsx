@@ -1,9 +1,9 @@
-import { useEditorState } from '@designcombo/core';
-import { useCallback, useEffect, useState } from 'react';
-import { Icons } from '../shared/icons';
-import { Button } from '../ui/button';
-import { Zap } from 'lucide-react';
-import useLayoutStore from '@/store/use-layout-store';
+import { useEditorState } from "@designcombo/core";
+import { useCallback, useEffect, useState } from "react";
+import { Icons } from "../shared/icons";
+import { Button } from "../ui/button";
+import { Image, Video, Zap } from "lucide-react";
+import useLayoutStore from "@/store/use-layout-store";
 
 const properties = {
   image: [],
@@ -15,19 +15,21 @@ const properties = {
 export default function ControlItem() {
   const { activeIds, trackItemsMap } = useEditorState();
   const [showControlItem, setShowControlItem] = useState(false);
+  const [typeElement, setTypeElement] = useState<string>("");
 
   useEffect(() => {
     if (activeIds.length === 1) {
       setShowControlItem(true);
+      setTypeElement(trackItemsMap[activeIds[0]].type);
     } else {
       setShowControlItem(false);
     }
   }, [activeIds, trackItemsMap]);
 
-  return <>{showControlItem && <ControlMenu />}</>;
+  return <>{showControlItem && <ControlMenu type={typeElement} />}</>;
 }
 
-function ControlMenu() {
+function ControlMenu({ type }: { type: string }) {
   const { setShowToolboxItem, setActiveToolboxItem, activeToolboxItem } =
     useLayoutStore();
 
@@ -41,7 +43,7 @@ function ControlMenu() {
         setActiveToolboxItem(type);
       }
     },
-    [activeToolboxItem],
+    [activeToolboxItem]
   );
 
   return (
@@ -51,21 +53,41 @@ function ControlMenu() {
     >
       <Button
         size="icon"
-        onClick={() => openToolboxItem('zap')}
+        onClick={() => openToolboxItem("zap")}
         variant="ghost"
       >
         <Zap size={20} className="text-white" />
       </Button>
+      {type === "text" && (
+        <Button
+          size="icon"
+          onClick={() => openToolboxItem("text")}
+          variant="ghost"
+        >
+          <Icons.type size={20} className="text-white" />
+        </Button>
+      )}
+      {type === "image" && (
+        <Button
+          size="icon"
+          onClick={() => openToolboxItem("image")}
+          variant="ghost"
+        >
+          <Image />
+        </Button>
+      )}
+      {type === "video" && (
+        <Button
+          size="icon"
+          onClick={() => openToolboxItem("video")}
+          variant="ghost"
+        >
+          <Video />
+        </Button>
+      )}
       <Button
         size="icon"
-        onClick={() => openToolboxItem('text')}
-        variant="ghost"
-      >
-        <Icons.type size={20} className="text-white" />
-      </Button>
-      <Button
-        size="icon"
-        onClick={() => openToolboxItem('animation')}
+        onClick={() => openToolboxItem("animation")}
         variant="ghost"
       >
         {/* <Icons.type size={20} className="text-white" /> */}

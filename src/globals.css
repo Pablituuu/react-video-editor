@@ -1,5 +1,12 @@
 /* @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap'); */
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100;9..40,200;9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100;9..40,200;9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&display=swap");
+/* src/index.css */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -50,15 +57,15 @@
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
 
-    --background-1: theme('colors.grey.1300');
-    --background-2: theme('colors.grey.1200');
-    --background-3: theme('colors.grey.1100');
-    --background-4: theme('colors.grey.1000');
-    --background-5: theme('colors.grey.950');
-    --background-6: theme('colors.grey.900');
-    --background-7: theme('colors.grey.800');
-    --background-8: theme('colors.grey.700');
-    --background-9: theme('colors.grey.600');
+    --background-1: theme("colors.grey.1300");
+    --background-2: theme("colors.grey.1200");
+    --background-3: theme("colors.grey.1100");
+    --background-4: theme("colors.grey.1000");
+    --background-5: theme("colors.grey.950");
+    --background-6: theme("colors.grey.900");
+    --background-7: theme("colors.grey.800");
+    --background-8: theme("colors.grey.700");
+    --background-9: theme("colors.grey.600");
   }
 }
 
@@ -72,7 +79,7 @@
 }
 
 .dm-sans-bold {
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
   font-optical-sizing: auto;
   font-weight: 500;
   font-style: normal;
