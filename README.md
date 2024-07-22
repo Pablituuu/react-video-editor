@@ -8,11 +8,11 @@ The project is for video editing through tools such as DesignCombo, ShaCDN, Reac
 
 ## Installation
 
-Install React-video-editor with npm
+Install react-video-editor with npm
 
 ```bash
-  git clone https://github.com/Pablituuu/React-video-editor.git
-  cd React-video-editor
+  git clone https://github.com/Pablituuu/react-video-editor.git
+  cd react-video-editor
   npm install
   npm run dev
 ```
@@ -23,4 +23,9 @@ Install React-video-editor with npm
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+[MIT](https://choosealicense.com/licenses/mit/)
+
+## Demo
+
+https://react-video-editor-mu.vercel.app/
+![Logo](image/image.png){width=50%}
