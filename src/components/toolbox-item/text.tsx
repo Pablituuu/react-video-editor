@@ -38,6 +38,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Checkbox } from "../ui/checkbox";
+import { Label } from "../ui/label";
 
 interface ITextProps {
   backgroundColor: string;
@@ -87,26 +89,26 @@ const stringContent = [
   "text",
   "backgroundColor",
   "color",
-  "shadowColor",
+  "textShadow",
   "strokeColor",
   "textDecoration",
 ];
 
 const TextProps = () => {
   const { activeIds, trackItemsMap } = useEditorState();
+  const [isBackgroundTransparent, setIsBackgroundTransparent] = useState(true);
   const [props, setProps] = useState<ITextProps>(defaultProps);
   const [openFontFamily, setOpenFontFamily] = useState(false);
   const [openTextAlign, setOpenTextAlign] = useState(false);
   const [openTextDistance, setOpenTextDistance] = useState(false);
   const [openFontCase, setOpenFontCase] = useState(false);
-  const [textColor, setTextColor] = useState("rgba(255,255,255,1)");
   const [strokeColor, setStrokeColor] = useState("rgba(255,255,255,1)");
   const [openStrokeColor, setOpenStrokeColor] = useState(false);
   const [openTextColor, setOpenTextColor] = useState(false);
-  const [backgorundColor, setBackgorundColor] = useState("rgba(255,255,255,1)");
   const [openBackgroundColor, setOpenBackgroundColor] = useState(false);
   const [shadowColor, setShadowColor] = useState("rgba(255,255,255,1)");
   const [openShadowColor, setOpenShadowColor] = useState(false);
+  const [opacityPrev, setOpacityPrev] = useState<number | "">(100);
   const fontFamilyTypes = [
     {
       value: "next.js",
@@ -139,13 +141,21 @@ const TextProps = () => {
     { icon: <AlignRight />, type: "right" },
   ];
   const fontSizeTypes = [64, 72, 80, 96, 128, 144, 160, 192, 256, 288, 320];
-  const fontCaseTypes = ["Lowecase", "Uppercase", "Sentence case"];
+  const fontCaseTypes = [
+    "Lowercase",
+    "Uppercase",
+    // , "Sentence case"
+  ];
 
   useEffect(() => {
     const [id] = activeIds;
     const trackItem = trackItemsMap[id];
     if (trackItem) {
       setProps(trackItem.details as ITextProps);
+      setOpacityPrev(trackItem.details.opacity);
+      trackItem.details.backgroundColor === "transparent"
+        ? setIsBackgroundTransparent(true)
+        : setIsBackgroundTransparent(false);
     }
   }, [activeIds]);
 
@@ -153,6 +163,13 @@ const TextProps = () => {
     (type: string, e: string | number) => {
       if (!stringContent.includes(type)) {
         e = Number(e);
+      }
+      if (type === "opacity") {
+        setOpacityPrev(Number(e));
+      }
+      if (type === "textShadow" && typeof e === "string") {
+        setShadowColor(e);
+        e = "20px 20px 40px " + e;
       }
       dispatcher.dispatch(EDIT_OBJECT, {
         payload: {
@@ -165,6 +182,13 @@ const TextProps = () => {
     },
     [props]
   );
+
+  const validateString = useCallback((e: string) => {
+    const regex = /^[0-9 ]*$/;
+    if (regex.test(e)) {
+      setOpacityPrev(e === "" ? "" : Number(e));
+    }
+  }, []);
 
   return (
     <div className="flex flex-col overflor-auto">
@@ -284,7 +308,13 @@ const TextProps = () => {
             </PopoverTrigger>
             <PopoverContent style={{ zIndex: 300 }} className="flex w-auto p-0">
               {textAlignTypes.map((textAlign, i) => (
-                <Toggle key={i}>{textAlign.icon}</Toggle>
+                <Toggle
+                  onClick={() => handleChange("textAlign", textAlign.type)}
+                  pressed={props?.textAlign === textAlign.type ? true : false}
+                  key={i}
+                >
+                  {textAlign.icon}
+                </Toggle>
               ))}
             </PopoverContent>
           </Popover>
@@ -303,7 +333,15 @@ const TextProps = () => {
             <PopoverContent style={{ zIndex: 300 }} className="flex w-auto p-0">
               <div className="flex flex-col">
                 {fontCaseTypes.map((fontCase, i) => (
-                  <Button variant="ghost" key={i}>
+                  <Button
+                    onClick={() =>
+                      fontCase === "Lowercase"
+                        ? handleChange("text", props?.text.toLowerCase())
+                        : handleChange("text", props?.text.toUpperCase())
+                    }
+                    variant="ghost"
+                    key={i}
+                  >
                     {fontCase}
                   </Button>
                 ))}
@@ -404,12 +442,24 @@ const TextProps = () => {
               </PopoverTrigger>
               <PopoverContent
                 style={{ zIndex: 300 }}
-                className="flex w-auto p-3"
+                className="flex w-auto p-3 flex-col gap-3"
               >
                 <HexColorPicker
                   color={props?.backgroundColor}
                   onChange={(e) => handleChange("backgroundColor", e)}
                 />
+                <div className="flex gap-2 items-center ">
+                  <Checkbox
+                    checked={isBackgroundTransparent}
+                    onCheckedChange={(e) =>
+                      handleChange(
+                        "backgroundColor",
+                        e ? "transparent" : "#000000"
+                      )
+                    }
+                  />
+                  <Label>Transparent</Label>
+                </div>
               </PopoverContent>
             </Popover>
           </div>
@@ -433,21 +483,32 @@ const TextProps = () => {
                 style={{ zIndex: 300 }}
                 className="flex w-auto p-3"
               >
-                <HexColorPicker color={shadowColor} onChange={setShadowColor} />
+                <HexColorPicker
+                  color={shadowColor}
+                  onChange={(e) => handleChange("textShadow", e)}
+                />
               </PopoverContent>
             </Popover>
           </div>
         </div>
-        <div className="grid grid-cols-4 items-center">
+        <div className="grid grid-cols-4 justify-center items-center">
           <div className="text-md text-[#e4e4e7] font-medium flex items-center text-muted-foreground">
             Opacity
           </div>
-          <div>
-            <Input size="sm" />
+          <div className="flex justify-center">
+            <Input
+              className="w-[70%]"
+              value={opacityPrev}
+              onChange={(e) => validateString(e.target.value)}
+              onBlur={() => handleChange("opacity", opacityPrev)}
+              size="sm"
+            />
           </div>
           <div className="flex justify-center col-span-2">
             <Slider
-              defaultValue={[50]}
+              defaultValue={[opacityPrev === "" ? 0 : Number(opacityPrev)]}
+              value={[opacityPrev === "" ? 0 : Number(opacityPrev)]}
+              onValueChange={(e) => handleChange("opacity", e[0])}
               max={100}
               step={1}
               className={cn("w-[60%]")}

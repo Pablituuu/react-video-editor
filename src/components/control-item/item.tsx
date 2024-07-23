@@ -13,14 +13,18 @@ const properties = {
 };
 
 export default function ControlItem() {
-  const { activeIds, trackItemsMap } = useEditorState();
+  const { activeIds, trackItemsMap, transitionsMap } = useEditorState();
   const [showControlItem, setShowControlItem] = useState(false);
   const [typeElement, setTypeElement] = useState<string>("");
 
   useEffect(() => {
     if (activeIds.length === 1) {
       setShowControlItem(true);
-      setTypeElement(trackItemsMap[activeIds[0]].type);
+      if (trackItemsMap[activeIds[0]]) {
+        setTypeElement(trackItemsMap[activeIds[0]]?.type);
+      } else {
+        setTypeElement(transitionsMap[activeIds[0]]?.type);
+      }
     } else {
       setShowControlItem(false);
     }
