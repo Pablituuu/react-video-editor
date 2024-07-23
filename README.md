@@ -9,6 +9,7 @@ https://react-video-editor-mu.vercel.app/
 
 ## Authors
 
+- [@xorb](https://github.com/xorb)
 - [@Pablituuu](https://www.github.com/Pablituuu)
 
 ## Installation
@@ -39,5 +40,6 @@ Install react-video-editor with npm
 
 ## Contact
 
+- [@xorb](https://github.com/xorb)
 - [@Pablituuu](https://www.github.com/Pablituuu)
 - [@Discord](https://discord.gg/nJHPtgKP)

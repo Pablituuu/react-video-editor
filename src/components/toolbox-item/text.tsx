@@ -25,7 +25,7 @@ import {
   UnfoldVertical,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { set, upperCase } from "lodash";
+import { set, transform, upperCase } from "lodash";
 import { Toggle } from "../ui/toggle";
 import { ScrollArea } from "../ui/scroll-area";
 import { Slider } from "../ui/slider";
@@ -94,8 +94,29 @@ const stringContent = [
   "textDecoration",
 ];
 
+const extractNumbersToTransform = (
+  transformString: string
+): {
+  scale?: number;
+  translateX?: number;
+  translateY?: number;
+  translateZ?: number;
+  rotate?: number;
+} => {
+  const regex = /(scale|translateX|translateY|translateZ|rotate)\(([^)]+)\)/g;
+  let match;
+  const transformations = {};
+  while ((match = regex.exec(transformString)) !== null) {
+    const transformType = match[1]; // Tipo de transformación (scale, translateX, etc.)
+    const transformValue = match[2]; // Valor de la transformación (dentro de paréntesis)
+    transformations[transformType] = transformValue;
+  }
+  return transformations;
+};
+
 const TextProps = () => {
   const { activeIds, trackItemsMap } = useEditorState();
+  const [scalePrev, setScalePrev] = useState<number | "">(100);
   const [isBackgroundTransparent, setIsBackgroundTransparent] = useState(true);
   const [props, setProps] = useState<ITextProps>(defaultProps);
   const [openFontFamily, setOpenFontFamily] = useState(false);
@@ -156,6 +177,10 @@ const TextProps = () => {
       trackItem.details.backgroundColor === "transparent"
         ? setIsBackgroundTransparent(true)
         : setIsBackgroundTransparent(false);
+      const transform = extractNumbersToTransform(trackItem.details.transform);
+      if (transform.scale) {
+        setScalePrev(transform.scale * 100);
+      }
     }
   }, [activeIds]);
 
@@ -171,6 +196,10 @@ const TextProps = () => {
         setShadowColor(e);
         e = "20px 20px 40px " + e;
       }
+      if (type === "transform") {
+        setScalePrev(Number(e));
+        e = "scale(" + Number(e) / 100 + ")";
+      }
       dispatcher.dispatch(EDIT_OBJECT, {
         payload: {
           details: {
@@ -183,10 +212,12 @@ const TextProps = () => {
     [props]
   );
 
-  const validateString = useCallback((e: string) => {
+  const validateString = useCallback((type: string, e: string) => {
     const regex = /^[0-9 ]*$/;
     if (regex.test(e)) {
-      setOpacityPrev(e === "" ? "" : Number(e));
+      type === "opacity"
+        ? setOpacityPrev(e === "" ? "" : Number(e))
+        : setScalePrev(e === "" ? "" : Number(e));
     }
   }, []);
 
@@ -491,25 +522,51 @@ const TextProps = () => {
             </Popover>
           </div>
         </div>
-        <div className="grid grid-cols-4 justify-center items-center">
-          <div className="text-md text-[#e4e4e7] font-medium flex items-center text-muted-foreground">
-            Opacity
-          </div>
-          <div className="flex justify-center">
+        <div className="text-md text-[#e4e4e7] font-medium h-11 flex items-center text-muted-foreground">
+          Opacity
+        </div>
+        <div className="grid grid-cols-4 items-center mx-4">
+          <div className="flex">
             <Input
-              className="w-[70%]"
+              className="w-[100%]"
               value={opacityPrev}
-              onChange={(e) => validateString(e.target.value)}
+              onChange={(e) => validateString("opacity", e.target.value)}
               onBlur={() => handleChange("opacity", opacityPrev)}
               size="sm"
             />
           </div>
-          <div className="flex justify-center col-span-2">
+          <div className="flex justify-center col-span-3">
             <Slider
               defaultValue={[opacityPrev === "" ? 0 : Number(opacityPrev)]}
               value={[opacityPrev === "" ? 0 : Number(opacityPrev)]}
               onValueChange={(e) => handleChange("opacity", e[0])}
               max={100}
+              step={1}
+              className={cn("w-[60%]")}
+            />
+          </div>
+        </div>
+
+        <div className="text-md text-[#e4e4e7] font-medium h-11 flex items-center text-muted-foreground">
+          Scale
+        </div>
+        <div className="grid grid-cols-4 items-center mx-4">
+          <div className="flex">
+            <Input
+              className="w-[100%]"
+              value={Math.round(Number(scalePrev))}
+              onChange={(e) => validateString("scale", e.target.value)}
+              onBlur={() => handleChange("transform", scalePrev)}
+              size="sm"
+            />
+          </div>
+          <div className="flex justify-center col-span-3">
+            <Slider
+              defaultValue={[scalePrev === "" ? 0 : Number(scalePrev)]}
+              value={[scalePrev === "" ? 0 : Number(scalePrev)]}
+              onValueChange={(e) => handleChange("transform", e[0])}
+              max={500}
+              min={0}
               step={1}
               className={cn("w-[60%]")}
             />
