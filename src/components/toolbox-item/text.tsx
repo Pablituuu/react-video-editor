@@ -59,6 +59,7 @@ interface ITextProps {
   textShadow: string;
   width: number;
   wordSpacing: string;
+  transform: string;
 }
 
 const defaultProps = {
@@ -79,6 +80,7 @@ const defaultProps = {
   textShadow: "none",
   width: 500,
   wordSpacing: "normal",
+  transform: "scale(1) rotate(0deg) translateX(0) translateY(0)",
 };
 
 const stringContent = [
@@ -106,12 +108,39 @@ const extractNumbersToTransform = (
   const regex = /(scale|translateX|translateY|translateZ|rotate)\(([^)]+)\)/g;
   let match;
   const transformations = {};
+  const replaceUnits = (value) => {
+    if (value.endsWith("deg")) {
+      return value.replace("deg", "");
+    } else if (value.endsWith("px")) {
+      return value.replace("px", "");
+    }
+    return value;
+  };
   while ((match = regex.exec(transformString)) !== null) {
-    const transformType = match[1]; // Tipo de transformación (scale, translateX, etc.)
-    const transformValue = match[2]; // Valor de la transformación (dentro de paréntesis)
-    transformations[transformType] = transformValue;
+    const transformType = match[1];
+    const transformValue = match[2];
+    if (transformType === "rotate") {
+      transformations[transformType] = transformValue.replace("deg", "");
+    } else {
+      transformations[transformType] = transformValue;
+    }
   }
   return transformations;
+};
+
+const updateTransform = (
+  transformString: string,
+  transformationType: string,
+  newValue: string | number
+) => {
+  const regex = new RegExp(`(${transformationType}\\([^\\)]+\\))`, "g");
+  if (transformationType === "rotate") {
+    return transformString.replace(
+      regex,
+      `${transformationType}(${newValue}deg)`
+    );
+  }
+  return transformString.replace(regex, `${transformationType}(${newValue})`);
 };
 
 const TextProps = () => {
@@ -130,6 +159,7 @@ const TextProps = () => {
   const [shadowColor, setShadowColor] = useState("rgba(255,255,255,1)");
   const [openShadowColor, setOpenShadowColor] = useState(false);
   const [opacityPrev, setOpacityPrev] = useState<number | "">(100);
+  const [rotatePrev, setRotatePrev] = useState<number | "">(0);
   const fontFamilyTypes = [
     {
       value: "next.js",
@@ -172,7 +202,7 @@ const TextProps = () => {
     const [id] = activeIds;
     const trackItem = trackItemsMap[id];
     if (trackItem) {
-      setProps(trackItem.details as ITextProps);
+      setProps({ ...(trackItem.details as ITextProps), ...defaultProps });
       setOpacityPrev(trackItem.details.opacity);
       trackItem.details.backgroundColor === "transparent"
         ? setIsBackgroundTransparent(true)
@@ -180,6 +210,9 @@ const TextProps = () => {
       const transform = extractNumbersToTransform(trackItem.details.transform);
       if (transform.scale) {
         setScalePrev(transform.scale * 100);
+      }
+      if (transform.rotate) {
+        setRotatePrev(transform.rotate);
       }
     }
   }, [activeIds]);
@@ -196,9 +229,15 @@ const TextProps = () => {
         setShadowColor(e);
         e = "20px 20px 40px " + e;
       }
-      if (type === "transform") {
+      if (type === "transformScale") {
         setScalePrev(Number(e));
-        e = "scale(" + Number(e) / 100 + ")";
+        type = "transform";
+        e = updateTransform(props.transform, "scale", Number(e) / 100);
+      }
+      if (type === "transformRotate") {
+        setRotatePrev(Number(e));
+        type = "transform";
+        e = updateTransform(props.transform, "rotate", Number(e));
       }
       dispatcher.dispatch(EDIT_OBJECT, {
         payload: {
@@ -217,7 +256,9 @@ const TextProps = () => {
     if (regex.test(e)) {
       type === "opacity"
         ? setOpacityPrev(e === "" ? "" : Number(e))
-        : setScalePrev(e === "" ? "" : Number(e));
+        : type === "scale"
+        ? setScalePrev(e === "" ? "" : Number(e))
+        : setRotatePrev(e === "" ? "" : Number(e));
     }
   }, []);
 
@@ -556,7 +597,7 @@ const TextProps = () => {
               className="w-[100%]"
               value={Math.round(Number(scalePrev))}
               onChange={(e) => validateString("scale", e.target.value)}
-              onBlur={() => handleChange("transform", scalePrev)}
+              onBlur={() => handleChange("transformScale", scalePrev)}
               size="sm"
             />
           </div>
@@ -564,8 +605,34 @@ const TextProps = () => {
             <Slider
               defaultValue={[scalePrev === "" ? 0 : Number(scalePrev)]}
               value={[scalePrev === "" ? 0 : Number(scalePrev)]}
-              onValueChange={(e) => handleChange("transform", e[0])}
+              onValueChange={(e) => handleChange("transformScale", e[0])}
               max={500}
+              min={0}
+              step={1}
+              className={cn("w-[60%]")}
+            />
+          </div>
+        </div>
+
+        <div className="text-md text-[#e4e4e7] font-medium h-11 flex items-center text-muted-foreground">
+          Rotate
+        </div>
+        <div className="grid grid-cols-4 items-center mx-4">
+          <div className="flex">
+            <Input
+              className="w-[100%]"
+              value={Math.round(Number(rotatePrev))}
+              onChange={(e) => validateString("rotate", e.target.value)}
+              onBlur={() => handleChange("transformRotate", rotatePrev)}
+              size="sm"
+            />
+          </div>
+          <div className="flex justify-center col-span-3">
+            <Slider
+              defaultValue={[rotatePrev === "" ? 0 : Number(rotatePrev)]}
+              value={[rotatePrev === "" ? 0 : Number(rotatePrev)]}
+              onValueChange={(e) => handleChange("transformRotate", e[0])}
+              max={360}
               min={0}
               step={1}
               className={cn("w-[60%]")}
