@@ -1,9 +1,9 @@
-import { useEditorState } from '@designcombo/core';
-import { useEffect, useState } from 'react';
-import { Textarea } from '../ui/textarea';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { HexColorPicker } from 'react-colorful';
-import { Button } from '../ui/button';
+import { EDIT_OBJECT, dispatcher, useEditorState } from "@designcombo/core";
+import { useCallback, useEffect, useState } from "react";
+import { Textarea } from "../ui/textarea";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { HexColorPicker } from "react-colorful";
+import { Button } from "../ui/button";
 import {
   Command,
   CommandEmpty,
@@ -11,7 +11,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '../ui/command';
+} from "../ui/command";
 import {
   ALargeSmall,
   AlignCenter,
@@ -23,13 +23,21 @@ import {
   Italic,
   Underline,
   UnfoldVertical,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { set, upperCase } from 'lodash';
-import { Toggle } from '../ui/toggle';
-import { ScrollArea } from '../ui/scroll-area';
-import { Slider } from '../ui/slider';
-import { Input } from '../ui/input';
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { set, upperCase } from "lodash";
+import { Toggle } from "../ui/toggle";
+import { ScrollArea } from "../ui/scroll-area";
+import { Slider } from "../ui/slider";
+import { Input } from "../ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 interface ITextProps {
   backgroundColor: string;
@@ -52,74 +60,86 @@ interface ITextProps {
 }
 
 const defaultProps = {
-  backgroundColor: 'transparent',
-  border: 'none',
-  color: '#ffffff',
-  fontFamily: 'Roboto-Bold',
+  backgroundColor: "transparent",
+  border: "none",
+  color: "#ffffff",
+  fontFamily: "Roboto-Bold",
   fontSize: 64,
-  fontStyle: 'normal',
-  fontWeight: 'normal',
+  fontStyle: "normal",
+  fontWeight: "normal",
   height: 400,
-  letterSpacing: 'normal',
-  lineHeight: 'normal',
+  letterSpacing: "normal",
+  lineHeight: "normal",
   opacity: 100,
-  text: 'Heading',
-  textAlign: 'left',
-  textDecoration: 'none',
-  textShadow: 'none',
+  text: "Heading",
+  textAlign: "left",
+  textDecoration: "none",
+  textShadow: "none",
   width: 500,
-  wordSpacing: 'normal',
+  wordSpacing: "normal",
 };
+
+const stringContent = [
+  "fontFamily",
+  "fontWeight",
+  "fontStyle",
+  "textAlign",
+  "text",
+  "backgroundColor",
+  "color",
+  "shadowColor",
+  "strokeColor",
+  "textDecoration",
+];
 
 const TextProps = () => {
   const { activeIds, trackItemsMap } = useEditorState();
   const [props, setProps] = useState<ITextProps>(defaultProps);
   const [openFontFamily, setOpenFontFamily] = useState(false);
-  const [openFontSize, setOpenFontSize] = useState(false);
   const [openTextAlign, setOpenTextAlign] = useState(false);
   const [openTextDistance, setOpenTextDistance] = useState(false);
   const [openFontCase, setOpenFontCase] = useState(false);
-  const [textColor, setTextColor] = useState('rgba(255,255,255,1)');
-  const [strokeColor, setStrokeColor] = useState('rgba(255,255,255,1)');
+  const [textColor, setTextColor] = useState("rgba(255,255,255,1)");
+  const [strokeColor, setStrokeColor] = useState("rgba(255,255,255,1)");
   const [openStrokeColor, setOpenStrokeColor] = useState(false);
   const [openTextColor, setOpenTextColor] = useState(false);
-  const [backgorundColor, setBackgorundColor] = useState('rgba(255,255,255,1)');
+  const [backgorundColor, setBackgorundColor] = useState("rgba(255,255,255,1)");
   const [openBackgroundColor, setOpenBackgroundColor] = useState(false);
-  const [shadowColor, setShadowColor] = useState('rgba(255,255,255,1)');
+  const [shadowColor, setShadowColor] = useState("rgba(255,255,255,1)");
   const [openShadowColor, setOpenShadowColor] = useState(false);
   const fontFamilyTypes = [
     {
-      value: 'next.js',
-      label: 'Next.js',
+      value: "next.js",
+      label: "Next.js",
     },
     {
-      value: 'sveltekit',
-      label: 'SvelteKit',
+      value: "sveltekit",
+      label: "SvelteKit",
     },
     {
-      value: 'nuxt.js',
-      label: 'Nuxt.js',
+      value: "nuxt.js",
+      label: "Nuxt.js",
     },
     {
-      value: 'remix',
-      label: 'Remix',
+      value: "remix",
+      label: "Remix",
     },
     {
-      value: 'astro',
-      label: 'Astro',
+      value: "astro",
+      label: "Astro",
     },
     {
-      value: 'Roboto-Bold',
-      label: 'Roboto-Bold',
+      value: "Roboto-Bold",
+      label: "Roboto-Bold",
     },
   ];
   const textAlignTypes = [
-    { icon: <AlignLeft />, type: 'left' },
-    { icon: <AlignCenter />, type: 'center' },
-    { icon: <AlignRight />, type: 'right' },
+    { icon: <AlignLeft />, type: "left" },
+    { icon: <AlignCenter />, type: "center" },
+    { icon: <AlignRight />, type: "right" },
   ];
   const fontSizeTypes = [64, 72, 80, 96, 128, 144, 160, 192, 256, 288, 320];
-  const fontCaseTypes = ['Lowecase', 'Uppercase', 'Sentence case'];
+  const fontCaseTypes = ["Lowecase", "Uppercase", "Sentence case"];
 
   useEffect(() => {
     const [id] = activeIds;
@@ -128,6 +148,24 @@ const TextProps = () => {
       setProps(trackItem.details as ITextProps);
     }
   }, [activeIds]);
+
+  const handleChange = useCallback(
+    (type: string, e: string | number) => {
+      if (!stringContent.includes(type)) {
+        e = Number(e);
+      }
+      dispatcher.dispatch(EDIT_OBJECT, {
+        payload: {
+          details: {
+            [type]: e,
+          },
+        },
+      });
+      setProps({ ...props, [e]: e });
+    },
+    [props]
+  );
+
   return (
     <div className="flex flex-col overflor-auto">
       <div className="text-md text-[#e4e4e7] font-medium h-11 border-b  border-border flex items-center px-4 text-muted-foreground">
@@ -137,6 +175,7 @@ const TextProps = () => {
         <Textarea
           placeholder="Type your message here."
           defaultValue={props?.text}
+          onBlur={(e) => handleChange("text", e.target.value)}
         />
         <div className="flex gap-2">
           <Popover open={openFontFamily} onOpenChange={setOpenFontFamily}>
@@ -149,9 +188,9 @@ const TextProps = () => {
               >
                 {props?.fontFamily
                   ? fontFamilyTypes.find(
-                      (framework) => framework.value === props?.fontFamily,
+                      (framework) => framework.value === props?.fontFamily
                     )?.label
-                  : 'Select framework...'}
+                  : "Select framework..."}
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
@@ -174,10 +213,10 @@ const TextProps = () => {
                       >
                         <Check
                           className={cn(
-                            'mr-2 h-4 w-4',
+                            "mr-2 h-4 w-4",
                             props?.fontFamily === fontFamilyType.value
-                              ? 'opacity-100'
-                              : 'opacity-0',
+                              ? "opacity-100"
+                              : "opacity-0"
                           )}
                         />
                         {fontFamilyType.label}
@@ -188,69 +227,43 @@ const TextProps = () => {
               </Command>
             </PopoverContent>
           </Popover>
-          <Popover open={openFontSize} onOpenChange={setOpenFontSize}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={openFontSize}
-                className="w-[80px] justify-between"
-              >
-                {props?.fontFamily
-                  ? fontSizeTypes.find(
-                      (fontSize) => fontSize === props?.fontSize,
-                    )
-                  : 'Select Size...'}
-                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent
+          <Select onValueChange={(e) => handleChange("fontSize", e)}>
+            <SelectTrigger className="w-[80px]">
+              <SelectValue placeholder={props.fontSize} />
+            </SelectTrigger>
+            <SelectContent
               style={{ zIndex: 300 }}
               className="flex w-[80px] p-0"
             >
-              <Command>
-                <CommandGroup>
-                  <CommandList>
-                    <ScrollArea>
-                      {fontSizeTypes.map((fontSize) => (
-                        <CommandItem
-                          key={fontSize}
-                          defaultValue={props?.fontSize}
-                          value={String(fontSize)}
-                          onSelect={(currentValue) => {
-                            setProps({
-                              ...props,
-                              fontSize: Number(currentValue),
-                            });
-                            setOpenFontSize(false);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              'mr-2 h-4 w-4',
-                              props?.fontSize === fontSize
-                                ? 'opacity-100'
-                                : 'opacity-0',
-                            )}
-                          />
-                          {fontSize}
-                        </CommandItem>
-                      ))}
-                    </ScrollArea>
-                  </CommandList>
-                </CommandGroup>
-              </Command>
-            </PopoverContent>
-          </Popover>
+              <SelectGroup>
+                {fontSizeTypes.map((fontSize, i) => (
+                  <SelectItem key={i} value={String(fontSize)}>
+                    {fontSize}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
         <div className="grid grid-cols-6">
-          <Toggle size="sm" className="w-[45px]" variant="outline">
+          <Toggle
+            onClick={() => handleChange("fontWeight", "bold")}
+            size="sm"
+            className="w-[45px]"
+            variant="outline"
+          >
             <Bold />
           </Toggle>
           <Toggle size="sm" className="w-[45px]" variant="outline">
             <Italic />
           </Toggle>
-          <Toggle size="sm" className="w-[45px]" variant="outline">
+          <Toggle
+            pressed={props?.textDecoration === "underline" ? true : false}
+            onClick={() => handleChange("textDecoration", "underline")}
+            size="sm"
+            className="w-[45px]"
+            variant="outline"
+          >
             <Underline />
           </Toggle>
           <Popover open={openTextAlign} onOpenChange={setOpenTextAlign}>
@@ -264,9 +277,9 @@ const TextProps = () => {
               >
                 {props?.textAlign
                   ? textAlignTypes.find(
-                      (textAlign) => textAlign.type === props?.textAlign,
+                      (textAlign) => textAlign.type === props?.textAlign
                     ).icon
-                  : 'Select Text Align...'}
+                  : "Select Text Align..."}
               </Button>
             </PopoverTrigger>
             <PopoverContent style={{ zIndex: 300 }} className="flex w-auto p-0">
@@ -331,7 +344,7 @@ const TextProps = () => {
                   variant="outline"
                   role="combobox"
                   aria-expanded={openTextColor}
-                  style={{ backgroundColor: textColor }}
+                  style={{ backgroundColor: props?.color }}
                   className="w-[40px] justify-between"
                 />
               </PopoverTrigger>
@@ -339,7 +352,10 @@ const TextProps = () => {
                 style={{ zIndex: 300 }}
                 className="flex w-auto p-3"
               >
-                <HexColorPicker color={textColor} onChange={setTextColor} />
+                <HexColorPicker
+                  color={props?.color}
+                  onChange={(e) => handleChange("color", e)}
+                />
               </PopoverContent>
             </Popover>
           </div>
@@ -382,7 +398,7 @@ const TextProps = () => {
                   variant="outline"
                   role="combobox"
                   aria-expanded={openBackgroundColor}
-                  style={{ backgroundColor: backgorundColor }}
+                  style={{ backgroundColor: props?.backgroundColor }}
                   className="w-[40px] justify-between"
                 />
               </PopoverTrigger>
@@ -391,8 +407,8 @@ const TextProps = () => {
                 className="flex w-auto p-3"
               >
                 <HexColorPicker
-                  color={backgorundColor}
-                  onChange={setBackgorundColor}
+                  color={props?.backgroundColor}
+                  onChange={(e) => handleChange("backgroundColor", e)}
                 />
               </PopoverContent>
             </Popover>
@@ -434,7 +450,7 @@ const TextProps = () => {
               defaultValue={[50]}
               max={100}
               step={1}
-              className={cn('w-[60%]')}
+              className={cn("w-[60%]")}
             />
           </div>
         </div>

@@ -15,8 +15,17 @@ const Container = ({ children }: { children: React.ReactNode }) => {
   const [showToolbox, setShowToolbox] = useState<string | null>(null);
 
   useEffect(() => {
-    if (activeIds.length === 1 && showToolboxItem && showToolbox === null) {
-      setShowToolbox(activeIds[0]);
+    if (activeIds.length === 1 && showToolboxItem) {
+      if (
+        showToolbox === null ||
+        (showToolbox !== null && showToolbox === activeIds[0])
+      ) {
+        setShowToolbox(activeIds[0]);
+      } else {
+        setShowToolbox(null);
+        setShowToolboxItem(false);
+        setActiveToolboxItem(null);
+      }
     } else {
       setShowToolbox(null);
       setShowToolboxItem(false);
