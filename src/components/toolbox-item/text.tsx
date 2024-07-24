@@ -77,7 +77,8 @@ const defaultProps = {
   text: "Heading",
   textAlign: "left",
   textDecoration: "none",
-  textShadow: "none",
+  textShadow:
+    "0px 0px 0px #ffffff, 0px 0px 0px #ffffff, 0px 0px 0px #ffffff, 0px 0px 0px #ffffff, 0px 0px 0px #ffffff",
   width: 500,
   wordSpacing: "normal",
   transform: "scale(1) rotate(0deg) translateX(0) translateY(0)",
@@ -94,6 +95,7 @@ const stringContent = [
   "textShadow",
   "strokeColor",
   "textDecoration",
+  "shadowColor",
 ];
 
 const extractNumbersToTransform = (
@@ -108,14 +110,6 @@ const extractNumbersToTransform = (
   const regex = /(scale|translateX|translateY|translateZ|rotate)\(([^)]+)\)/g;
   let match;
   const transformations = {};
-  const replaceUnits = (value) => {
-    if (value.endsWith("deg")) {
-      return value.replace("deg", "");
-    } else if (value.endsWith("px")) {
-      return value.replace("px", "");
-    }
-    return value;
-  };
   while ((match = regex.exec(transformString)) !== null) {
     const transformType = match[1];
     const transformValue = match[2];
@@ -126,6 +120,29 @@ const extractNumbersToTransform = (
     }
   }
   return transformations;
+};
+
+const extractNumbersToShadow = (
+  shadowString: string
+): {
+  offsetX?: number;
+  offsetY?: number;
+  blur?: number;
+  color?: string;
+} => {
+  const regex = /(-?\d+px) (-?\d+px) (\d+px) (#[0-9a-fA-F]{3,6})/;
+  const match = shadowString.match(regex);
+  if (match) {
+    const [_, offsetX, offsetY, blurRadius, color] = match;
+    return {
+      offsetX: parseInt(offsetX, 10),
+      offsetY: parseInt(offsetY, 10),
+      blur: parseInt(blurRadius, 10),
+      color: color,
+    };
+  } else {
+    return null;
+  }
 };
 
 const updateTransform = (
@@ -152,13 +169,21 @@ const TextProps = () => {
   const [openTextAlign, setOpenTextAlign] = useState(false);
   const [openTextDistance, setOpenTextDistance] = useState(false);
   const [openFontCase, setOpenFontCase] = useState(false);
-  const [strokeColor, setStrokeColor] = useState("rgba(255,255,255,1)");
+  const [strokeColor, setStrokeColor] = useState("#ffffff");
   const [openStrokeColor, setOpenStrokeColor] = useState(false);
   const [openTextColor, setOpenTextColor] = useState(false);
   const [openBackgroundColor, setOpenBackgroundColor] = useState(false);
-  const [shadowColor, setShadowColor] = useState("rgba(255,255,255,1)");
+  const [shadowColor, setShadowColor] = useState("#ffffff");
   const [openShadowColor, setOpenShadowColor] = useState(false);
   const [opacityPrev, setOpacityPrev] = useState<number | "">(100);
+  const [shadowOffsetXPrev, setShadowOffsetXPrev] = useState<number | "">(0);
+  const [shadowOffsetX, setShadowOffsetX] = useState<number | "">(0);
+  const [shadowOffsetY, setShadowOffsetY] = useState<number | "">(0);
+  const [shadowOffsetYPrev, setShadowOffsetYPrev] = useState<number | "">(0);
+  const [shadowBlur, setShadowBlur] = useState<number | "">(0);
+  const [shadowBlurPrev, setShadowBlurPrev] = useState<number | "">(0);
+  const [strokeWidth, setStrokeWidth] = useState<number | "">(0);
+  const [strokeWidthPrev, setStrokeWidthPrev] = useState<number | "">(0);
   const [rotatePrev, setRotatePrev] = useState<number | "">(0);
   const fontFamilyTypes = [
     {
@@ -214,8 +239,32 @@ const TextProps = () => {
       if (transform.rotate) {
         setRotatePrev(transform.rotate);
       }
+      if (trackItem.details.textShadow) {
+        let textShadow = defaultProps.textShadow;
+        if (trackItem.details.textShadow !== "none")
+          textShadow = trackItem.details.textShadow;
+        const splitString = textShadow.split(", ");
+        const propStroke = extractNumbersToShadow(splitString[1]);
+        const propShadow = extractNumbersToShadow(splitString[4]);
+        const strokeWidth = propStroke.offsetX;
+        const strokeColor = propStroke.color;
+        const shadowOffsetX = propShadow.offsetX;
+        const shadowOffsetY = propShadow.offsetY;
+        const shadowBlur = propShadow.blur;
+        const shadowColor = propShadow.color;
+        setStrokeWidth(strokeWidth);
+        setStrokeWidthPrev(strokeWidth);
+        setStrokeColor(strokeColor);
+        setShadowOffsetX(shadowOffsetX);
+        setShadowOffsetXPrev(shadowOffsetX);
+        setShadowOffsetYPrev(shadowOffsetY);
+        setShadowOffsetY(shadowOffsetY);
+        setShadowBlur(shadowBlur);
+        setShadowBlurPrev(shadowBlur);
+        setShadowColor(shadowColor);
+      }
     }
-  }, [activeIds]);
+  }, []);
 
   const handleChange = useCallback(
     (type: string, e: string | number) => {
@@ -225,9 +274,39 @@ const TextProps = () => {
       if (type === "opacity") {
         setOpacityPrev(Number(e));
       }
-      if (type === "textShadow" && typeof e === "string") {
-        setShadowColor(e);
-        e = "20px 20px 40px " + e;
+      if (type === "strokeWidth") {
+        setStrokeWidth(Number(e));
+        setStrokeWidthPrev(Number(e));
+        type = "textShadow";
+        e = `-${e}px -${e}px 0px ${strokeColor}, ${e}px -${e}px 0px ${strokeColor}, -${e}px ${e}px 0px ${strokeColor}, ${e}px ${e}px 0px ${strokeColor}, ${shadowOffsetX}px ${shadowOffsetY}px ${shadowBlur}px ${shadowColor}`;
+      }
+      if (type === "strokeColor") {
+        setStrokeColor(String(e));
+        type = "textShadow";
+        e = `-${strokeWidth}px -${strokeWidth}px 0px ${e}, ${strokeWidth}px -${strokeWidth}px 0px ${e}, -${strokeWidth}px ${strokeWidth}px 0px ${e}, ${strokeWidth}px ${strokeWidth}px 0px ${e}, ${shadowOffsetX}px ${shadowOffsetY}px ${shadowBlur}px ${shadowColor}`;
+      }
+      if (type === "shadowOffsetX") {
+        setShadowOffsetX(Number(e));
+        setShadowOffsetXPrev(Number(e));
+        type = "textShadow";
+        e = `-${strokeWidth}px -${strokeWidth}px 0px ${strokeColor}, ${strokeWidth}px -${strokeWidth}px 0px ${strokeColor}, -${strokeWidth}px ${strokeWidth}px 0px ${strokeColor}, ${strokeWidth}px ${strokeWidth}px 0px ${strokeColor}, ${e}px ${shadowOffsetY}px ${shadowBlur}px ${shadowColor}`;
+      }
+      if (type === "shadowOffsetY") {
+        setShadowOffsetY(Number(e));
+        setShadowOffsetYPrev(Number(e));
+        type = "textShadow";
+        e = `-${strokeWidth}px -${strokeWidth}px 0px ${strokeColor}, ${strokeWidth}px -${strokeWidth}px 0px ${strokeColor}, -${strokeWidth}px ${strokeWidth}px 0px ${strokeColor}, ${strokeWidth}px ${strokeWidth}px 0px ${strokeColor}, ${shadowOffsetX}px ${e}px ${shadowBlur}px ${shadowColor}`;
+      }
+      if (type === "shadowBlur") {
+        setShadowBlur(Number(e));
+        setShadowBlurPrev(Number(e));
+        type = "textShadow";
+        e = `-${strokeWidth}px -${strokeWidth}px 0px ${strokeColor}, ${strokeWidth}px -${strokeWidth}px 0px ${strokeColor}, -${strokeWidth}px ${strokeWidth}px 0px ${strokeColor}, ${strokeWidth}px ${strokeWidth}px 0px ${strokeColor}, ${shadowOffsetX}px ${shadowOffsetY}px ${e}px ${shadowColor}`;
+      }
+      if (type === "shadowColor") {
+        setShadowColor(String(e));
+        type = "textShadow";
+        e = `-${strokeWidth}px -${strokeWidth}px 0px ${strokeColor}, ${strokeWidth}px -${strokeWidth}px 0px ${strokeColor}, -${strokeWidth}px ${strokeWidth}px 0px ${strokeColor}, ${strokeWidth}px ${strokeWidth}px 0px ${strokeColor}, ${shadowOffsetX}px ${shadowOffsetY}px ${shadowBlur}px ${e}`;
       }
       if (type === "transformScale") {
         setScalePrev(Number(e));
@@ -248,17 +327,35 @@ const TextProps = () => {
       });
       setProps({ ...props, [e]: e });
     },
-    [props]
+    [
+      props,
+      strokeColor,
+      strokeWidth,
+      shadowOffsetX,
+      shadowOffsetY,
+      shadowBlur,
+      shadowColor,
+    ]
   );
 
   const validateString = useCallback((type: string, e: string) => {
     const regex = /^[0-9 ]*$/;
     if (regex.test(e)) {
-      type === "opacity"
-        ? setOpacityPrev(e === "" ? "" : Number(e))
-        : type === "scale"
-        ? setScalePrev(e === "" ? "" : Number(e))
-        : setRotatePrev(e === "" ? "" : Number(e));
+      if (type === "opacity") {
+        setOpacityPrev(e === "" ? "" : Number(e));
+      }
+      if (type === "strokeWidth") {
+        setStrokeWidthPrev(e === "" ? "" : Number(e));
+      }
+      if (type === "shadowOffsetX") {
+        setShadowOffsetXPrev(e === "" ? "" : Number(e));
+      }
+      if (type === "shadowOffsetY") {
+        setShadowOffsetYPrev(e === "" ? "" : Number(e));
+      }
+      if (type === "shadowBlur") {
+        setShadowBlurPrev(e === "" ? "" : Number(e));
+      }
     }
   }, []);
 
@@ -487,9 +584,56 @@ const TextProps = () => {
               </PopoverTrigger>
               <PopoverContent
                 style={{ zIndex: 300 }}
-                className="flex w-auto p-3"
+                className="flex w-auto p-3 flex-col gap-3"
               >
-                <HexColorPicker color={strokeColor} onChange={setStrokeColor} />
+                <HexColorPicker
+                  color={strokeColor}
+                  onChange={(e) => handleChange("strokeColor", e)}
+                />
+
+                <div className="flex flex-col gap-1">
+                  <div className="text-md text-[#e4e4e7] font-medium h-11 flex items-center text-muted-foreground">
+                    Stroke Width
+                  </div>
+                  <div className="grid grid-cols-3 items-center">
+                    <div className="flex col-span-1 w-[60px]">
+                      <Input
+                        className="w-[100%]"
+                        value={Math.round(Number(strokeWidthPrev))}
+                        onChange={(e) =>
+                          validateString("strokeWidth", e.target.value)
+                        }
+                        onBlur={() =>
+                          handleChange("strokeWidth", strokeWidthPrev)
+                        }
+                        size="sm"
+                      />
+                    </div>
+                    <div className="flex justify-center col-span-2">
+                      <Slider
+                        defaultValue={[
+                          strokeWidthPrev === "" ? 0 : Number(strokeWidthPrev),
+                        ]}
+                        value={[
+                          strokeWidthPrev === "" ? 0 : Number(strokeWidthPrev),
+                        ]}
+                        onValueChange={(e) => handleChange("strokeWidth", e[0])}
+                        max={6}
+                        min={0}
+                        step={1}
+                        className={cn("w-[60%]")}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex gap-2 items-center ">
+                  <Checkbox
+                    checked={strokeWidth === 0 ? true : false}
+                    onCheckedChange={() => handleChange("strokeWidth", 0)}
+                  />
+                  <Label>Remove Stroke</Label>
+                </div>
               </PopoverContent>
             </Popover>
           </div>
@@ -530,7 +674,7 @@ const TextProps = () => {
                       )
                     }
                   />
-                  <Label>Transparent</Label>
+                  <Label>Transparent Background</Label>
                 </div>
               </PopoverContent>
             </Popover>
@@ -553,12 +697,97 @@ const TextProps = () => {
               </PopoverTrigger>
               <PopoverContent
                 style={{ zIndex: 300 }}
-                className="flex w-auto p-3"
+                className="flex flex-col w-auto p-3"
               >
                 <HexColorPicker
                   color={shadowColor}
-                  onChange={(e) => handleChange("textShadow", e)}
+                  onChange={(e) => handleChange("shadowColor", e)}
                 />
+                <div className="text-md text-[#e4e4e7] font-medium h-11 flex items-center text-muted-foreground">
+                  Offset X
+                </div>
+                <div className="grid grid-cols-3 items-center">
+                  <div className="flex col-span-1 w-[60px]">
+                    <Input
+                      value={shadowOffsetXPrev}
+                      onChange={(e) =>
+                        validateString("shadowOffsetX", e.target.value)
+                      }
+                      onBlur={() =>
+                        handleChange("shadowOffsetX", shadowOffsetXPrev)
+                      }
+                      size="sm"
+                    />
+                  </div>
+                  <div className="flex justify-center col-span-2">
+                    <Slider
+                      defaultValue={[
+                        shadowOffsetXPrev === "" ? 0 : shadowOffsetXPrev,
+                      ]}
+                      value={[shadowOffsetXPrev === "" ? 0 : shadowOffsetXPrev]}
+                      onValueChange={(e) => handleChange("shadowOffsetX", e[0])}
+                      max={100}
+                      step={1}
+                      className={cn("w-[60%]")}
+                    />
+                  </div>
+                </div>
+                <div className="text-md text-[#e4e4e7] font-medium h-11 flex items-center text-muted-foreground">
+                  Offset Y
+                </div>
+                <div className="grid grid-cols-3 items-center">
+                  <div className="flex col-span-1 w-[60px]">
+                    <Input
+                      value={shadowOffsetYPrev}
+                      onChange={(e) =>
+                        validateString("shadowOffsetY", e.target.value)
+                      }
+                      onBlur={() =>
+                        handleChange("shadowOffsetY", shadowOffsetYPrev)
+                      }
+                      size="sm"
+                    />
+                  </div>
+                  <div className="flex justify-center col-span-2">
+                    <Slider
+                      defaultValue={[
+                        shadowOffsetYPrev === "" ? 0 : shadowOffsetYPrev,
+                      ]}
+                      value={[shadowOffsetYPrev === "" ? 0 : shadowOffsetYPrev]}
+                      onValueChange={(e) => handleChange("shadowOffsetY", e[0])}
+                      max={100}
+                      step={1}
+                      className={cn("w-[60%]")}
+                    />
+                  </div>
+                </div>
+                <div className="text-md text-[#e4e4e7] font-medium h-11 flex items-center text-muted-foreground">
+                  Blur
+                </div>
+                <div className="grid grid-cols-3 items-center">
+                  <div className="flex col-span-1 w-[60px]">
+                    <Input
+                      value={shadowBlurPrev}
+                      onChange={(e) =>
+                        validateString("shadowBlur", e.target.value)
+                      }
+                      onBlur={() => handleChange("shadowBlur", shadowBlurPrev)}
+                      size="sm"
+                    />
+                  </div>
+                  <div className="flex justify-center col-span-2">
+                    <Slider
+                      defaultValue={[
+                        shadowBlurPrev === "" ? 0 : shadowBlurPrev,
+                      ]}
+                      value={[shadowBlurPrev === "" ? 0 : shadowBlurPrev]}
+                      onValueChange={(e) => handleChange("shadowBlur", e[0])}
+                      max={100}
+                      step={1}
+                      className={cn("w-[60%]")}
+                    />
+                  </div>
+                </div>
               </PopoverContent>
             </Popover>
           </div>

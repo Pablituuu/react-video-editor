@@ -1,14 +1,37 @@
+import { useCallback } from "react";
 import { Label } from "../ui/label";
 import { ScrollArea } from "../ui/scroll-area";
+import { ADD_TEXT, dispatcher } from "@designcombo/core";
+import { nanoid } from "nanoid";
+import { DEFAULT_FONT } from "@/data/fonts";
 
 export const Texts = () => {
+  const addItem = useCallback(async () => {
+    dispatcher?.dispatch(ADD_TEXT, {
+      payload: {
+        id: nanoid(),
+        details: {
+          text: "Heading",
+          fontSize: 128,
+          fonturl: DEFAULT_FONT.url,
+          fontFamily: DEFAULT_FONT.postScriptName,
+          color: "#ffffff",
+        },
+      },
+      options: {},
+    });
+  }, []);
+
   return (
     <div className="flex flex-col h-full">
       <ScrollArea>
         <div className="text-md text-[#e4e4e7] font-medium h-11 border-b border-border flex items-center px-4 text-muted-foreground">
           Text
         </div>
-        <div className="flex w-full items-center justify-center">
+        <div
+          onClick={addItem}
+          className="flex w-full items-center justify-center"
+        >
           <Label className="border-4 cursor-pointer rounded-xl p-3 m-3 font-bold text-[28px]">
             Add title
           </Label>
