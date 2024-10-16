@@ -10,12 +10,12 @@ import Auth from "./pages/auth";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />
+    element: <App />,
   },
   {
     path: "/auth",
-    element: <Auth />
-  }
+    element: <Auth />,
+  },
 ]);
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
