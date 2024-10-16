@@ -1,5 +1,5 @@
 import { generateId } from "@designcombo/timeline";
-import { ICaption, IText } from "@designcombo/types";
+import { ICaption } from "@designcombo/types";
 
 interface Word {
   start: number;
