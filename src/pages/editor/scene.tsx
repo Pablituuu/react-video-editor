@@ -10,21 +10,19 @@ import { EDIT_OBJECT, dispatch } from "@designcombo/events";
 import {
   SelectionInfo,
   emptySelection,
-  getSelectionByIds
+  getSelectionByIds,
 } from "./utils/target";
-
-import { ITrackItem } from "@designcombo/types";
 import { getCurrentTime } from "@/utils/time";
 const size = {
   width: 1080,
-  height: 1920
+  height: 1920,
 };
 
 let holdGroupPosition: Record<string, any> | null = null;
 let dragStartEnd = false;
 
 export default function Scene({
-  stateManager
+  stateManager,
 }: {
   stateManager: StateManager;
 }) {
@@ -102,7 +100,7 @@ export default function Scene({
       selectableTargets: [".designcombo-scene-item"],
       selectFromInside: false,
       selectByClick: true,
-      toggleContinueSelect: "shift"
+      toggleContinueSelect: "shift",
     })
       .on("select", (e) => {
         const ids = e.selected.map((el) => getIdFromClassName(el.className));
@@ -110,11 +108,11 @@ export default function Scene({
 
         stateManager.updateState(
           {
-            activeIds: ids
+            activeIds: ids,
           },
           {
             updateHistory: false,
-            kind: "layer:selection"
+            kind: "layer:selection",
           }
         );
       })
@@ -150,11 +148,11 @@ export default function Scene({
 
           stateManager.updateState(
             {
-              activeIds: ids
+              activeIds: ids,
             },
             {
               updateHistory: false,
-              kind: "layer:selection"
+              kind: "layer:selection",
             }
           );
           setTargets(targets);
@@ -214,7 +212,7 @@ export default function Scene({
         width: "100%",
         height: "100%",
         position: "relative",
-        flex: 1
+        flex: 1,
       }}
       ref={containerRef}
     >
@@ -237,7 +235,7 @@ export default function Scene({
             width: size.width,
             height: size.height,
             background: "#000000",
-            marginTop: 14
+            marginTop: 14,
           }}
           className="designcombo_scene"
         >
@@ -263,10 +261,10 @@ export default function Scene({
                   [targetId]: {
                     details: {
                       left: target.style.left,
-                      top: target.style.top
-                    }
-                  }
-                }
+                      top: target.style.top,
+                    },
+                  },
+                },
               });
             }}
             onScale={({ target, transform, direction }) => {
@@ -322,10 +320,10 @@ export default function Scene({
                     details: {
                       transform: target.style.transform,
                       left: parseFloat(target.style.left),
-                      top: parseFloat(target.style.top)
-                    }
-                  }
-                }
+                      top: parseFloat(target.style.top),
+                    },
+                  },
+                },
               });
             }}
             onRotate={({ target, transform }) => {
@@ -339,11 +337,11 @@ export default function Scene({
                   [targetId]: {
                     details: {
                       details: {
-                        transform: target.style.transform
-                      }
-                    }
-                  }
-                }
+                        transform: target.style.transform,
+                      },
+                    },
+                  },
+                },
               });
             }}
             onDragGroup={({ events }) => {
@@ -362,7 +360,7 @@ export default function Scene({
                 event.target.style.top = `${top}px`;
                 holdGroupPosition[id] = {
                   left: left,
-                  top: top
+                  top: top,
                 };
               }
             }}
@@ -370,7 +368,7 @@ export default function Scene({
               target,
               width: nextWidth,
               height: nextHeight,
-              direction
+              direction,
             }) => {
               if (direction[1] === 1) {
                 const currentWidth = target.clientWidth;
@@ -401,27 +399,27 @@ export default function Scene({
                     details: {
                       width: parseFloat(target.style.width),
                       height: parseFloat(target.style.height),
-                      fontSize: parseFloat(target.style.fontSize)
-                    }
-                  }
-                }
+                      fontSize: parseFloat(target.style.fontSize),
+                    },
+                  },
+                },
               });
             }}
             onDragGroupEnd={() => {
               if (holdGroupPosition) {
-                const payload: Record<string, Partial<ITrackItem>> = {};
+                const payload: Record<string, Partial<any>> = {};
                 Object.keys(holdGroupPosition).forEach((id) => {
                   const left = holdGroupPosition![id].left;
                   const top = holdGroupPosition![id].top;
                   payload[id] = {
                     details: {
                       top: `${top}px`,
-                      left: `${left}px`
-                    }
+                      left: `${left}px`,
+                    },
                   };
                 });
                 dispatch(EDIT_OBJECT, {
-                  payload: payload
+                  payload: payload,
                 });
                 holdGroupPosition = null;
               }
