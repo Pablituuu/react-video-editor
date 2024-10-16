@@ -7,7 +7,6 @@ import {
   IImage,
   IItem,
   IText,
-  ITrackItem,
   IVideo
 } from "@designcombo/types";
 
@@ -33,9 +32,9 @@ export const SequenceItem: Record<
   string,
   (item: IItem, options: SequenceItemOptions) => JSX.Element
 > = {
-  text: (item: IText, options: SequenceItemOptions) => {
+  text: (item, options: SequenceItemOptions) => {
     const { handleTextChange, fps, editableTextId } = options;
-    const { id, details } = item;
+    const { id, details } = item as IText;
     const { from, durationInFrames } = calculateFrames(item.display, fps);
     const boxShadowAsShadow = item.details.boxShadow
       ? `${item.details.boxShadow.x}px ${item.details.boxShadow.y}px ${item.details.boxShadow.blur}px ${item.details.boxShadow.color}`
@@ -49,26 +48,26 @@ export const SequenceItem: Record<
         data-track-item="transition-element"
         style={{
           position: "absolute",
-          width: item?.details?.width || 300,
-          height: item?.details?.height || 400,
-          transform: item.details?.transform || "none",
-          fontSize: item?.details?.fontSize || "16px",
-          textAlign: item?.details?.textAlign || "left",
-          top: item?.details?.top || 300,
-          left: item?.details?.left || 600,
-          color: item?.details?.color || "#000000",
-          backgroundColor: item?.details?.backgroundColor || "transparent",
-          border: item?.details?.border || "none",
-          opacity: item?.details?.opacity! / 100,
-          fontFamily: item?.details?.fontFamily || "Arial",
-          fontWeight: item?.details?.fontWeight || "normal",
-          lineHeight: item?.details?.lineHeight || "normal",
-          letterSpacing: item?.details?.letterSpacing || "normal",
-          wordSpacing: item?.details?.wordSpacing || "normal",
-          wordWrap: item?.details?.wordWrap || "",
-          wordBreak: item?.details?.wordBreak || "normal",
+          width: details.width || 300,
+          height: details.height || 400,
+          transform: details.transform || "none",
+          fontSize: details.fontSize || "16px",
+          textAlign: details.textAlign || "left",
+          top: details.top || 300,
+          left: details.left || 600,
+          color: details.color || "#000000",
+          backgroundColor: details.backgroundColor || "transparent",
+          border: details.border || "none",
+          opacity: details.opacity! / 100,
+          fontFamily: details.fontFamily || "Arial",
+          fontWeight: details.fontWeight || "normal",
+          lineHeight: details.lineHeight || "normal",
+          letterSpacing: details.letterSpacing || "normal",
+          wordSpacing: details.wordSpacing || "normal",
+          wordWrap: details.wordWrap || "",
+          wordBreak: details.wordBreak || "normal",
           pointerEvents: "auto",
-          textTransform: item?.details.textTransform || "none"
+          textTransform: details.textTransform || "none"
         }}
       >
         <TextLayer
@@ -79,7 +78,7 @@ export const SequenceItem: Record<
           onChange={handleTextChange}
           style={{
             position: "relative",
-            textDecoration: item?.details?.textDecoration || "none",
+            textDecoration: details.textDecoration || "none",
             WebkitTextStroke: `${item.details.borderWidth}px ${item.details.borderColor}`, // Outline/stroke color and thickness
             paintOrder: "stroke fill", // Order of painting
             textShadow: boxShadowAsShadow
@@ -88,9 +87,9 @@ export const SequenceItem: Record<
       </Sequence>
     );
   },
-  caption: (item: ICaption, options: SequenceItemOptions) => {
+  caption: (item, options: SequenceItemOptions) => {
     const { handleTextChange, fps, editableTextId } = options;
-    const { id, details } = item;
+    const { id, details } = item as ICaption;
     const { from, durationInFrames } = calculateFrames(item.display, fps);
     const boxShadowAsShadow = item.details.boxShadow
       ? `${item.details.boxShadow.x}px ${item.details.boxShadow.y}px ${item.details.boxShadow.blur}px ${item.details.boxShadow.color}`
@@ -104,25 +103,25 @@ export const SequenceItem: Record<
         data-track-item="transition-element"
         style={{
           position: "absolute",
-          width: item?.details?.width || 300,
-          height: item?.details?.height || 400,
+          width: details.width || 300,
+          height: details.height || 400,
           transform: item.details?.transform || "none",
-          fontSize: item?.details?.fontSize || "16px",
-          textAlign: item?.details?.textAlign || "left",
-          top: item?.details?.top || 300,
-          left: item?.details?.left || 600,
-          color: item?.details?.color || "#000000",
-          backgroundColor: item?.details?.backgroundColor || "transparent",
-          border: item?.details?.border || "none",
-          opacity: item?.details?.opacity! / 100,
-          fontFamily: item?.details?.fontFamily || "Arial",
-          fontWeight: item?.details?.fontWeight || "normal",
-          lineHeight: item?.details?.lineHeight || "normal",
-          letterSpacing: item?.details?.letterSpacing || "normal",
-          wordSpacing: item?.details?.wordSpacing || "normal",
-          wordWrap: item?.details?.wordWrap || "normal",
-          wordBreak: item?.details?.wordBreak || "normal",
-          textTransform: item?.details.textTransform || "none",
+          fontSize: details.fontSize || "16px",
+          textAlign: details.textAlign || "left",
+          top: details.top || 300,
+          left: details.left || 600,
+          color: details.color || "#000000",
+          backgroundColor: details.backgroundColor || "transparent",
+          border: details.border || "none",
+          opacity: details.opacity! / 100,
+          fontFamily: details.fontFamily || "Arial",
+          fontWeight: details.fontWeight || "normal",
+          lineHeight: details.lineHeight || "normal",
+          letterSpacing: details.letterSpacing || "normal",
+          wordSpacing: details.wordSpacing || "normal",
+          wordWrap: details.wordWrap || "normal",
+          wordBreak: details.wordBreak || "normal",
+          textTransform: details.textTransform || "none",
           pointerEvents: "auto"
         }}
       >
@@ -134,7 +133,7 @@ export const SequenceItem: Record<
           onChange={handleTextChange}
           style={{
             position: "relative",
-            textDecoration: item?.details?.textDecoration || "none",
+            textDecoration: details.textDecoration || "none",
             WebkitTextStroke: `${item.details.borderWidth}px ${item.details.borderColor}`, // Outline/stroke color and thickness
             paintOrder: "stroke fill", // Order of painting
             textShadow: boxShadowAsShadow
@@ -143,12 +142,12 @@ export const SequenceItem: Record<
       </Sequence>
     );
   },
-  image: (item: IImage, options: SequenceItemOptions) => {
+  image: (item, options: SequenceItemOptions) => {
     const { fps } = options;
-
+    const { details } = item as IImage;
     const { from, durationInFrames } = calculateFrames(item.display, fps);
 
-    const crop = item.details?.crop || {
+    const crop = details.crop || {
       x: 0,
       y: 0,
       width: item.details.width,
@@ -169,7 +168,7 @@ export const SequenceItem: Record<
         {item.isMain && (
           <MainLayerBackground
             key={item.id + "background"}
-            background={item.details.background}
+            background={details.background}
           />
         )}
         <AbsoluteFill
@@ -181,7 +180,7 @@ export const SequenceItem: Record<
             left: item?.details?.left || 0,
             width: crop.width || "100%", // Default width
             height: crop.height || "auto", // Default height
-            transform: item.details?.transform || "none",
+            transform: details.transform || "none",
             opacity:
               item?.details?.opacity !== undefined
                 ? item.details.opacity / 100
@@ -191,8 +190,8 @@ export const SequenceItem: Record<
               boxShadowAsOutline +
               (boxShadowAsShadow ? ", " + boxShadowAsShadow : ""), // Default box shadow
             overflow: "hidden",
-            transformOrigin: item?.details?.transformOrigin || "center center",
-            filter: `brightness(${item.details.brightness}%) blur(${item.details.blur}px)`
+            transformOrigin: details.transformOrigin || "center center",
+            filter: `brightness(${details.brightness}%) blur(${details.blur}px)`
           }}
         >
           <div
@@ -202,8 +201,8 @@ export const SequenceItem: Record<
               position: "relative",
               overflow: "hidden",
               pointerEvents: "none",
-              scale: `${item.details.flipX ? "-1" : "1"} ${
-                item.details.flipY ? "-1" : "1"
+              scale: `${details.flipX ? "-1" : "1"} ${
+                details.flipY ? "-1" : "1"
               }`
             }}
           >
@@ -217,15 +216,16 @@ export const SequenceItem: Record<
                 position: "absolute"
               }}
               data-id={item.id}
-              src={item.details.src}
+              src={details.src}
             />
           </div>
         </AbsoluteFill>
       </Sequence>
     );
   },
-  video: (item: IVideo, options: SequenceItemOptions) => {
+  video: (item, options: SequenceItemOptions) => {
     const { fps } = options;
+    const { details } = item as IVideo;
     const playbackRate = item.playbackRate || 1;
     const { from, durationInFrames } = calculateFrames(
       {
@@ -238,7 +238,7 @@ export const SequenceItem: Record<
       from: (item.trim?.from || item.display.from) / playbackRate,
       to: (item.trim?.to || item.display.to) / playbackRate
     };
-    const crop = item.details?.crop || {
+    const crop = details.crop || {
       x: 0,
       y: 0,
       width: item.details.width,
@@ -259,7 +259,7 @@ export const SequenceItem: Record<
         {item.isMain && (
           <MainLayerBackground
             key={item.id + "background"}
-            background={item.details.background || "#ffffff"}
+            background={details.background || "#ffffff"}
           />
         )}
         <AbsoluteFill
@@ -276,13 +276,13 @@ export const SequenceItem: Record<
               item?.details?.opacity !== undefined
                 ? item.details.opacity / 100
                 : 1,
-            borderRadius: `${Math.min(crop.width, crop.height) * ((item.details.borderRadius || 0) / 100)}px`, // Default border radius
+            borderRadius: `${Math.min(crop.width!, crop.height!) * ((item.details.borderRadius || 0) / 100)}px`, // Default border radius
             boxShadow:
               boxShadowAsOutline +
               (boxShadowAsShadow ? ", " + boxShadowAsShadow : ""), // Default box shadow
             overflow: "hidden",
-            transformOrigin: item?.details?.transformOrigin || "center center",
-            filter: `brightness(${item.details.brightness}%) blur(${item.details.blur}px)`
+            transformOrigin: details.transformOrigin || "center center",
+            filter: `brightness(${details.brightness}%) blur(${details.blur}px)`
           }}
         >
           <div
@@ -292,8 +292,8 @@ export const SequenceItem: Record<
               position: "relative",
               overflow: "hidden",
               pointerEvents: "none",
-              scale: `${item.details.flipX ? "-1" : "1"} ${
-                item.details.flipY ? "-1" : "1"
+              scale: `${details.flipX ? "-1" : "1"} ${
+                details.flipY ? "-1" : "1"
               }`
             }}
           >
@@ -301,8 +301,8 @@ export const SequenceItem: Record<
               startFrom={(trim.from / 1000) * fps}
               endAt={(trim.to / 1000) * fps + REMOTION_SAFE_FRAME}
               playbackRate={playbackRate}
-              src={item.details.src}
-              volume={item.details.volume || 0 / 100}
+              src={details.src}
+              volume={details.volume || 0 / 100}
               style={{
                 pointerEvents: "none",
                 top: -crop.y || 0,
@@ -317,8 +317,9 @@ export const SequenceItem: Record<
       </Sequence>
     );
   },
-  audio: (item: IAudio, options: SequenceItemOptions) => {
+  audio: (item, options: SequenceItemOptions) => {
     const { fps } = options;
+    const { details } = item as IAudio;
     const playbackRate = item.playbackRate || 1;
     const { from, durationInFrames } = calculateFrames(
       {
@@ -346,8 +347,8 @@ export const SequenceItem: Record<
             startFrom={(trim.from / 1000) * fps}
             endAt={(trim.to / 1000) * fps + REMOTION_SAFE_FRAME}
             playbackRate={playbackRate}
-            src={item.details.src}
-            volume={item.details.volume! / 100}
+            src={details.src}
+            volume={details.volume! / 100}
           />
         </AbsoluteFill>
       </Sequence>

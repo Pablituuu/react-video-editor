@@ -1,5 +1,5 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { IBoxShadow, ITrackItem } from "@designcombo/types";
+import { IBoxShadow, ITrackItem, IVideo } from "@designcombo/types";
 import Outline from "./common/outline";
 import Shadow from "./common/shadow";
 import Opacity from "./common/opacity";
@@ -13,7 +13,7 @@ import { EDIT_OBJECT, dispatch } from "@designcombo/events";
 import Flip from "./common/flip";
 import PlaybackRate from "./common/playback-rate";
 
-const BasicVideo = ({ trackItem }: { trackItem: ITrackItem }) => {
+const BasicVideo = ({ trackItem }: { trackItem: ITrackItem & IVideo }) => {
   const [properties, setProperties] = useState(trackItem);
 
   const handleChangeVolume = (v: number) => {
@@ -34,7 +34,7 @@ const BasicVideo = ({ trackItem }: { trackItem: ITrackItem }) => {
           ...prev.details,
           volume: v
         }
-      } as ITrackItem;
+      };
     });
   };
 
@@ -55,7 +55,7 @@ const BasicVideo = ({ trackItem }: { trackItem: ITrackItem }) => {
           ...prev.details,
           borderWidth: v
         }
-      } as ITrackItem;
+      };
     });
   };
 
@@ -76,7 +76,7 @@ const BasicVideo = ({ trackItem }: { trackItem: ITrackItem }) => {
           ...prev.details,
           borderColor: v
         }
-      } as ITrackItem;
+      };
     });
   };
 
@@ -97,7 +97,7 @@ const BasicVideo = ({ trackItem }: { trackItem: ITrackItem }) => {
           ...prev.details,
           opacity: v
         }
-      } as ITrackItem;
+      };
     });
   };
 
@@ -118,7 +118,7 @@ const BasicVideo = ({ trackItem }: { trackItem: ITrackItem }) => {
           ...prev.details,
           borderRadius: v
         }
-      } as ITrackItem;
+      };
     });
   };
 
@@ -140,7 +140,7 @@ const BasicVideo = ({ trackItem }: { trackItem: ITrackItem }) => {
           ...prev.details,
           boxShadow
         }
-      } as ITrackItem;
+      };
     });
   };
   useEffect(() => {
@@ -164,7 +164,7 @@ const BasicVideo = ({ trackItem }: { trackItem: ITrackItem }) => {
           <Flip trackItem={trackItem} />
           <Volume
             onChange={(v: number) => handleChangeVolume(v)}
-            value={properties.details.volume}
+            value={properties.details.volume!}
           />
           <Rounded
             onChange={(v: number) => onChangeBorderRadius(v)}

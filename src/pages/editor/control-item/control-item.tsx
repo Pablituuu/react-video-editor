@@ -1,6 +1,13 @@
 import React from "react";
 import useLayoutStore from "@/store/use-layout-store";
-import { ITrackItem } from "@designcombo/types";
+import {
+  IAudio,
+  IImage,
+  IText,
+  ITrackItem,
+  ITrackItemAndDetails,
+  IVideo
+} from "@designcombo/types";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
@@ -83,7 +90,7 @@ const ActiveControlItem = ({
   trackItem,
   activeToolboxItem
 }: {
-  trackItem?: ITrackItem;
+  trackItem?: ITrackItemAndDetails;
   activeToolboxItem?: string;
 }) => {
   if (!trackItem || !activeToolboxItem) {
@@ -93,10 +100,18 @@ const ActiveControlItem = ({
     <>
       {
         {
-          "basic-text": <BasicText trackItem={trackItem} />,
-          "basic-image": <BasicImage trackItem={trackItem} />,
-          "basic-video": <BasicVideo trackItem={trackItem} />,
-          "basic-audio": <BasicAudio trackItem={trackItem} />,
+          "basic-text": (
+            <BasicText trackItem={trackItem as ITrackItem & IText} />
+          ),
+          "basic-image": (
+            <BasicImage trackItem={trackItem as ITrackItem & IImage} />
+          ),
+          "basic-video": (
+            <BasicVideo trackItem={trackItem as ITrackItem & IVideo} />
+          ),
+          "basic-audio": (
+            <BasicAudio trackItem={trackItem as ITrackItem & IAudio} />
+          ),
           "preset-text": <Presets />,
           animation: <Animations />,
           smart: <Smart />

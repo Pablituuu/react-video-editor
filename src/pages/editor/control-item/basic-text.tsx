@@ -46,7 +46,7 @@ const getStyleNameFromFontName = (fontName: string) => {
   return styleName;
 };
 
-const BasicText = ({ trackItem }: { trackItem: IText }) => {
+const BasicText = ({ trackItem }: { trackItem: ITrackItem & IText }) => {
   const [properties, setProperties] = useState<ITextControlProps>({
     color: "#000000",
     colorDisplay: "#000000",
@@ -91,14 +91,12 @@ const BasicText = ({ trackItem }: { trackItem: IText }) => {
       ...selectedFont,
       name: getStyleNameFromFontName(currentFont.postScriptName)
     });
-
-    if (trackItem.details.opacityDisplay == undefined) {
-      trackItem.details.opacityDisplay = "100";
-    }
-
-    if (trackItem.details.fontSizeDisplay == undefined) {
-      trackItem.details.fontSizeDisplay = "62";
-    }
+    // if (trackItem.details.opacityDisplay == undefined) {
+    //   trackItem.details.opa = "100";
+    // }
+    // if (trackItem.details.fontSizeDisplay == undefined) {
+    //   trackItem.details.fontSizeDisplay = "62";
+    // }
     setProperties({
       color: trackItem.details.color || "#ffffff",
       colorDisplay: trackItem.details.color || "#ffffff",
@@ -107,7 +105,7 @@ const BasicText = ({ trackItem }: { trackItem: IText }) => {
       fontFamily: selectedFont?.family || "Open Sans",
       fontFamilyDisplay: selectedFont?.family || "Open Sans",
       opacity: trackItem.details.opacity || 1,
-      opacityDisplay: (trackItem.details.opacityDisplay || "100") + "%",
+      opacityDisplay: (trackItem.details.opacity.toString() || "100") + "%",
       textAlign: trackItem.details.textAlign || "left",
       textDecoration: trackItem.details.textDecoration || "none",
       borderWidth: trackItem.details.borderWidth || 0,

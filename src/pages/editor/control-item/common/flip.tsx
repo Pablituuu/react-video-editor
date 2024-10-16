@@ -1,10 +1,14 @@
 import { Button } from "@/components/button";
 import { Label } from "@/components/ui/label";
 import { EDIT_OBJECT, dispatch } from "@designcombo/events";
-import { ITrackItem } from "@designcombo/types";
-import { useEffect, useState } from "react";
+import { IImage, ITrackItem, IVideo } from "@designcombo/types";
+import { useState } from "react";
 
-export default function Flip({ trackItem }: { trackItem: ITrackItem }) {
+export default function Flip({
+  trackItem
+}: {
+  trackItem: ITrackItem & (IImage | IVideo);
+}) {
   const [flip, setFlip] = useState({
     flipX: trackItem.details.flipX,
     flipY: trackItem.details.flipY

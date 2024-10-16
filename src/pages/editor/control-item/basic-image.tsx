@@ -1,5 +1,5 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { IBoxShadow, ITrackItem } from "@designcombo/types";
+import { IBoxShadow, IImage, ITrackItem } from "@designcombo/types";
 import Outline from "./common/outline";
 import Shadow from "./common/shadow";
 import Opacity from "./common/opacity";
@@ -13,7 +13,7 @@ import Blur from "./common/blur";
 import Brightness from "./common/brightness";
 import Flip from "./common/flip";
 
-const BasicImage = ({ trackItem }: { trackItem: ITrackItem }) => {
+const BasicImage = ({ trackItem }: { trackItem: ITrackItem & IImage }) => {
   const [properties, setProperties] = useState(trackItem);
   useEffect(() => {
     setProperties(trackItem);
@@ -36,7 +36,7 @@ const BasicImage = ({ trackItem }: { trackItem: ITrackItem }) => {
           ...prev.details,
           borderWidth: v
         }
-      } as ITrackItem;
+      };
     });
   };
 
@@ -57,7 +57,7 @@ const BasicImage = ({ trackItem }: { trackItem: ITrackItem }) => {
           ...prev.details,
           borderColor: v
         }
-      } as ITrackItem;
+      };
     });
   };
 
@@ -78,7 +78,7 @@ const BasicImage = ({ trackItem }: { trackItem: ITrackItem }) => {
           ...prev.details,
           opacity: v
         }
-      } as ITrackItem;
+      };
     });
   };
 
@@ -99,7 +99,7 @@ const BasicImage = ({ trackItem }: { trackItem: ITrackItem }) => {
           ...prev.details,
           blur: v
         }
-      } as ITrackItem;
+      };
     });
   };
   const onChangeBrightness = (v: number) => {
@@ -119,7 +119,7 @@ const BasicImage = ({ trackItem }: { trackItem: ITrackItem }) => {
           ...prev.details,
           brightness: v
         }
-      } as ITrackItem;
+      };
     });
   };
 
@@ -140,7 +140,7 @@ const BasicImage = ({ trackItem }: { trackItem: ITrackItem }) => {
           ...prev.details,
           borderRadius: v
         }
-      } as ITrackItem;
+      };
     });
   };
 
@@ -162,7 +162,7 @@ const BasicImage = ({ trackItem }: { trackItem: ITrackItem }) => {
           ...prev.details,
           boxShadow
         }
-      } as ITrackItem;
+      };
     });
   };
   return (

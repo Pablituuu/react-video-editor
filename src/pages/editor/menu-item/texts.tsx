@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { DEFAULT_FONT } from "@/data/fonts";
-import { ADD_CAPTION, ADD_TEXT, dispatch } from "@designcombo/events";
+import { ADD_TEXT, dispatch } from "@designcombo/events";
 import { generateId } from "@designcombo/timeline";
 
 export const Texts = () => {

@@ -1,11 +1,11 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ITrackItem } from "@designcombo/types";
+import { IAudio, ITrackItem } from "@designcombo/types";
 import Volume from "./common/volume";
 import Speed from "./common/speed";
 import { useState } from "react";
 import { EDIT_OBJECT, dispatch } from "@designcombo/events";
 
-const BasicAudio = ({ trackItem }: { trackItem: ITrackItem }) => {
+const BasicAudio = ({ trackItem }: { trackItem: ITrackItem & IAudio }) => {
   const [properties, setProperties] = useState(trackItem);
 
   const handleChangeVolume = (v: number) => {
@@ -26,7 +26,24 @@ const BasicAudio = ({ trackItem }: { trackItem: ITrackItem }) => {
           ...prev.details,
           volume: v
         }
-      } as ITrackItem;
+      };
+    });
+  };
+
+  const handleChangeSpeed = (v: number) => {
+    dispatch(EDIT_OBJECT, {
+      payload: {
+        [trackItem.id]: {
+          playbackRate: v
+        }
+      }
+    });
+
+    setProperties((prev) => {
+      return {
+        ...prev,
+        playbackRate: v
+      };
     });
   };
 
@@ -39,9 +56,12 @@ const BasicAudio = ({ trackItem }: { trackItem: ITrackItem }) => {
         <div className="px-4 flex flex-col gap-2">
           <Volume
             onChange={(v: number) => handleChangeVolume(v)}
-            value={properties.details.volume}
+            value={properties.details.volume!}
           />
-          <Speed />
+          <Speed
+            value={properties.playbackRate!}
+            onChange={handleChangeSpeed}
+          />
         </div>
       </ScrollArea>
     </div>

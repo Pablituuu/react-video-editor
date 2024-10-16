@@ -1,5 +1,4 @@
 import { User } from "@/interfaces/editor";
-import supabase from "@/utils/supabase";
 import { create } from "zustand";
 
 interface AuthStore {
@@ -15,25 +14,10 @@ const useAuthStore = create<AuthStore>((set) => ({
   user: null,
   setUser: (user) => set({ user }),
   isAuthenticated: false,
-  signinWithGithub: async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "github"
-    });
-    if (error) {
-      console.log(error);
-    }
-  },
-  signinWithMagicLink: async ({ email }: { email: string }) => {
-    const { error } = await supabase.auth.signInWithOtp({
-      email: email
-    });
-    if (error) {
-      console.log(error);
-    }
-  },
+  signinWithGithub: async () => {},
+  signinWithMagicLink: async () => {},
 
   signOut: async () => {
-    await supabase.auth.signOut();
     set({ user: null, isAuthenticated: false });
   }
 }));

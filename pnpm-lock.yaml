@@ -9,17 +9,17 @@ importers:
   .:
     dependencies:
       '@designcombo/events':
-        specifier: 0.1.13
-        version: 0.1.13
+        specifier: 0.1.14
+        version: 0.1.14
       '@designcombo/state':
-        specifier: 0.1.13
-        version: 0.1.13(@designcombo/events@0.1.13)(@designcombo/types@0.1.13)
+        specifier: 0.1.14
+        version: 0.1.14(@designcombo/events@0.1.14)(@designcombo/types@0.1.14)
       '@designcombo/timeline':
-        specifier: 0.1.13
-        version: 0.1.13(@designcombo/events@0.1.13)(@designcombo/types@0.1.13)(@types/lodash-es@4.17.12)
+        specifier: 0.1.14
+        version: 0.1.14(@designcombo/events@0.1.14)(@designcombo/types@0.1.14)(@types/lodash-es@4.17.12)
       '@designcombo/types':
-        specifier: 0.1.13
-        version: 0.1.13
+        specifier: 0.1.14
+        version: 0.1.14
       '@emotion/react':
         specifier: ^11.13.3
         version: 11.13.3(@types/react@18.3.8)(react@18.3.1)
@@ -77,15 +77,6 @@ importers:
       '@remotion/player':
         specifier: ^4.0.212
         version: 4.0.212(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@supabase/auth-ui-react':
-        specifier: ^0.4.7
-        version: 0.4.7(@supabase/supabase-js@2.45.4)
-      '@supabase/auth-ui-shared':
-        specifier: ^0.1.8
-        version: 0.1.8(@supabase/supabase-js@2.45.4)
-      '@supabase/supabase-js':
-        specifier: ^2.45.4
-        version: 2.45.4
       '@tabler/icons-react':
         specifier: ^3.5.0
         version: 3.19.0(react@18.3.1)
@@ -306,24 +297,24 @@ packages:
   '@daybrush/utils@1.13.0':
     resolution: {integrity: sha512-ALK12C6SQNNHw1enXK+UO8bdyQ+jaWNQ1Af7Z3FNxeAwjYhQT7do+TRE4RASAJ3ObaS2+TJ7TXR3oz2Gzbw0PQ==}
 
-  '@designcombo/events@0.1.13':
-    resolution: {integrity: sha512-SuQSzhEpm+IS0zVWmpSobwkBtm1qYXyn7drE4rV8XkPgFBwB8Xb4A2sJzSpui9JdB7nh1hJe3TXCwjx/K4r1xg==}
+  '@designcombo/events@0.1.14':
+    resolution: {integrity: sha512-QMBmZnm+t8uJ6GBR581gH/3UYUTdzdb4gIeaW5jMTA1Y95oxanU90OqOELKkItuVpgKhbgXMIJR8lQ6EnwaZ/g==}
 
-  '@designcombo/state@0.1.13':
-    resolution: {integrity: sha512-YQLudQJ5PtmM0+jmRz5IJc/3kbaxFRw5m0kuLyxG4JG55Px5TuShBHTQfo2OdUcMP589Jkrq0C7EUzluqH5ELg==}
+  '@designcombo/state@0.1.14':
+    resolution: {integrity: sha512-NmjO1xyphvWfZBsd1+WWRECjCkt72Z2kaFrXgWKgs3mAlDCwhoY1/pdJ51FxeBloHohgEt08eJDxKkn1FqRBpQ==}
     peerDependencies:
-      '@designcombo/events': 0.1.13
-      '@designcombo/types': 0.1.13
+      '@designcombo/events': 0.1.14
+      '@designcombo/types': 0.1.14
 
-  '@designcombo/timeline@0.1.13':
-    resolution: {integrity: sha512-nQNdVfY1sql7Jp6GcU0FGD21V22tFHVriNnYaezln52wJYZ8/0GPxwnSVZEHOYzrMOYFw5AtotFo2mx0dcarAA==}
+  '@designcombo/timeline@0.1.14':
+    resolution: {integrity: sha512-vUwngKNLG2/zsHFwmrBs7UG4vS9funweFJGFfBvTBmmBdZChG4+sBQyduvFd61sz7OYbtAiC1k7/9+gaEpD89A==}
     peerDependencies:
-      '@designcombo/events': 0.1.13
-      '@designcombo/types': 0.1.13
+      '@designcombo/events': 0.1.14
+      '@designcombo/types': 0.1.14
       '@types/lodash-es': ^4.17.12
 
-  '@designcombo/types@0.1.13':
-    resolution: {integrity: sha512-r/gZaLELsoIjN9fXzhD4dU5BGw4y5pIAOIsn1e8noo0bYIIDnFFDXL72bWrdCAb1cBSu5F459GIaGNdG/1rGkA==}
+  '@designcombo/types@0.1.14':
+    resolution: {integrity: sha512-pn3CA7lQiKS4CwZ1PidDCU0KbTyXxeSsS2CygNicK92fCCSbjdNCMd4cn/x4+MEBQE96ZVrh4aKAKhqpR/v4Kg==}
 
   '@egjs/agent@2.4.4':
     resolution: {integrity: sha512-cvAPSlUILhBBOakn2krdPnOGv5hAZq92f1YHxYcfu0p7uarix2C6Ia3AVizpS1SGRZGiEkIS5E+IVTLg1I2Iog==}
@@ -1146,41 +1137,6 @@ packages:
   '@scena/matrix@1.1.1':
     resolution: {integrity: sha512-JVKBhN0tm2Srl+Yt+Ywqu0oLgLcdemDQlD1OxmN9jaCTwaFPZ7tY8n6dhVgMEaR9qcR7r+kAlMXnSfNyYdE+Vg==}
 
-  '@stitches/core@1.2.8':
-    resolution: {integrity: sha512-Gfkvwk9o9kE9r9XNBmJRfV8zONvXThnm1tcuojL04Uy5uRyqg93DC83lDebl0rocZCfKSjUv+fWYtMQmEDJldg==}
-
-  '@supabase/auth-js@2.65.0':
-    resolution: {integrity: sha512-+wboHfZufAE2Y612OsKeVP4rVOeGZzzMLD/Ac3HrTQkkY4qXNjI6Af9gtmxwccE5nFvTiF114FEbIQ1hRq5uUw==}
-
-  '@supabase/auth-ui-react@0.4.7':
-    resolution: {integrity: sha512-Lp4FQGFh7BMX1Y/BFaUKidbryL7eskj1fl6Lby7BeHrTctbdvDbCMjVKS8wZ2rxuI8FtPS2iU900fSb70FHknQ==}
-    peerDependencies:
-      '@supabase/supabase-js': ^2.21.0
-
-  '@supabase/auth-ui-shared@0.1.8':
-    resolution: {integrity: sha512-ouQ0DjKcEFg+0gZigFIEgu01V3e6riGZPzgVD0MJsCBNsMsiDT74+GgCEIElMUpTGkwSja3xLwdFRFgMNFKcjg==}
-    peerDependencies:
-      '@supabase/supabase-js': ^2.21.0
-
-  '@supabase/functions-js@2.4.1':
-    resolution: {integrity: sha512-8sZ2ibwHlf+WkHDUZJUXqqmPvWQ3UHN0W30behOJngVh/qHHekhJLCFbh0AjkE9/FqqXtf9eoVvmYgfCLk5tNA==}
-
-  '@supabase/node-fetch@2.6.15':
-    resolution: {integrity: sha512-1ibVeYUacxWYi9i0cf5efil6adJ9WRyZBLivgjs+AUpewx1F3xPi7gLgaASI2SmIQxPoCEjAsLAzKPgMJVgOUQ==}
-    engines: {node: 4.x || >=6.0.0}
-
-  '@supabase/postgrest-js@1.16.1':
-    resolution: {integrity: sha512-EOSEZFm5pPuCPGCmLF1VOCS78DfkSz600PBuvBND/IZmMciJ1pmsS3ss6TkB6UkuvTybYiBh7gKOYyxoEO3USA==}
-
-  '@supabase/realtime-js@2.10.2':
-    resolution: {integrity: sha512-qyCQaNg90HmJstsvr2aJNxK2zgoKh9ZZA8oqb7UT2LCh3mj9zpa3Iwu167AuyNxsxrUE8eEJ2yH6wLCij4EApA==}
-
-  '@supabase/storage-js@2.7.0':
-    resolution: {integrity: sha512-iZenEdO6Mx9iTR6T7wC7sk6KKsoDPLq8rdu5VRy7+JiT1i8fnqfcOr6mfF2Eaqky9VQzhP8zZKQYjzozB65Rig==}
-
-  '@supabase/supabase-js@2.45.4':
-    resolution: {integrity: sha512-E5p8/zOLaQ3a462MZnmnz03CrduA5ySH9hZyL03Y+QZLIOO4/Gs8Rdy4ZCKDHsN7x0xdanVEWWFN3pJFQr9/hg==}
-
   '@tabler/icons-react@3.19.0':
     resolution: {integrity: sha512-AqEWGI0tQWgqo6ZjMO5yJ9sYT8oXLuAM/up0hN9iENS6IdtNZryKrkNSiMgpwweNTpl8wFFG/dAZ959S91A/uQ==}
     peerDependencies:
@@ -1220,9 +1176,6 @@ packages:
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
 
-  '@types/phoenix@1.6.5':
-    resolution: {integrity: sha512-xegpDuR+z0UqG9fwHqNoy3rI7JDlvaPh2TY47Fl80oq6g+hXT+c/LEuE43X48clZ6lOfANl5WrPur9fYO1RJ/w==}
-
   '@types/prop-types@15.7.13':
     resolution: {integrity: sha512-hCZTSvwbzWGvhqxp/RqVqwU999pBf2vp7hzIjiYOsl8wqOmUxkQ6ddw1cV3l8811+kdUFus/q4d1Y3E3SyEifA==}
 
@@ -1234,9 +1187,6 @@ packages:
 
   '@types/tinycolor2@1.4.6':
     resolution: {integrity: sha512-iEN8J0BoMnsWBqjVbWH/c0G0Hh7O21lpR2/+PrvAVgWdzL7eexIFm4JN/Wn10PTcmNdtS6U67r499mlWMXOxNw==}
-
-  '@types/ws@8.5.12':
-    resolution: {integrity: sha512-3tPRkv1EtkDpzlgyKyI8pGsGZAGPEaXeu0DOj5DI25Ja91bdAYddYHbADRYVrZMRbfW+1l5YwXVDKohDJNQxkQ==}
 
   '@typescript-eslint/eslint-plugin@8.6.0':
     resolution: {integrity: sha512-UOaz/wFowmoh2G6Mr9gw60B1mm0MzUtm6Ic8G2yM1Le6gyj5Loi/N+O5mocugRGY+8OeeKmkMmbxNqUCq3B4Sg==}
@@ -2255,9 +2205,6 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
-  prop-types@15.8.1:
-    resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
-
   proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
 
@@ -2908,14 +2855,14 @@ snapshots:
 
   '@daybrush/utils@1.13.0': {}
 
-  '@designcombo/events@0.1.13':
+  '@designcombo/events@0.1.14':
     dependencies:
       rxjs: 7.8.1
 
-  '@designcombo/state@0.1.13(@designcombo/events@0.1.13)(@designcombo/types@0.1.13)':
+  '@designcombo/state@0.1.14(@designcombo/events@0.1.14)(@designcombo/types@0.1.14)':
     dependencies:
-      '@designcombo/events': 0.1.13
-      '@designcombo/types': 0.1.13
+      '@designcombo/events': 0.1.14
+      '@designcombo/types': 0.1.14
       immer: 10.1.1
       lodash.clonedeep: 4.5.0
       lodash.isequal: 4.5.0
@@ -2924,10 +2871,10 @@ snapshots:
       nanoid: 5.0.7
       rxjs: 7.8.1
 
-  '@designcombo/timeline@0.1.13(@designcombo/events@0.1.13)(@designcombo/types@0.1.13)(@types/lodash-es@4.17.12)':
+  '@designcombo/timeline@0.1.14(@designcombo/events@0.1.14)(@designcombo/types@0.1.14)(@types/lodash-es@4.17.12)':
     dependencies:
-      '@designcombo/events': 0.1.13
-      '@designcombo/types': 0.1.13
+      '@designcombo/events': 0.1.14
+      '@designcombo/types': 0.1.14
       '@types/lodash-es': 4.17.12
       es-toolkit: 1.25.1
       fabric: 6.4.3
@@ -2941,7 +2888,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@designcombo/types@0.1.13':
+  '@designcombo/types@0.1.14':
     dependencies:
       rxjs: 7.8.1
 
@@ -3721,63 +3668,6 @@ snapshots:
     dependencies:
       '@daybrush/utils': 1.13.0
 
-  '@stitches/core@1.2.8': {}
-
-  '@supabase/auth-js@2.65.0':
-    dependencies:
-      '@supabase/node-fetch': 2.6.15
-
-  '@supabase/auth-ui-react@0.4.7(@supabase/supabase-js@2.45.4)':
-    dependencies:
-      '@stitches/core': 1.2.8
-      '@supabase/auth-ui-shared': 0.1.8(@supabase/supabase-js@2.45.4)
-      '@supabase/supabase-js': 2.45.4
-      prop-types: 15.8.1
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-
-  '@supabase/auth-ui-shared@0.1.8(@supabase/supabase-js@2.45.4)':
-    dependencies:
-      '@supabase/supabase-js': 2.45.4
-
-  '@supabase/functions-js@2.4.1':
-    dependencies:
-      '@supabase/node-fetch': 2.6.15
-
-  '@supabase/node-fetch@2.6.15':
-    dependencies:
-      whatwg-url: 5.0.0
-
-  '@supabase/postgrest-js@1.16.1':
-    dependencies:
-      '@supabase/node-fetch': 2.6.15
-
-  '@supabase/realtime-js@2.10.2':
-    dependencies:
-      '@supabase/node-fetch': 2.6.15
-      '@types/phoenix': 1.6.5
-      '@types/ws': 8.5.12
-      ws: 8.18.0
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-
-  '@supabase/storage-js@2.7.0':
-    dependencies:
-      '@supabase/node-fetch': 2.6.15
-
-  '@supabase/supabase-js@2.45.4':
-    dependencies:
-      '@supabase/auth-js': 2.65.0
-      '@supabase/functions-js': 2.4.1
-      '@supabase/node-fetch': 2.6.15
-      '@supabase/postgrest-js': 1.16.1
-      '@supabase/realtime-js': 2.10.2
-      '@supabase/storage-js': 2.7.0
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-
   '@tabler/icons-react@3.19.0(react@18.3.1)':
     dependencies:
       '@tabler/icons': 3.19.0
@@ -3823,8 +3713,6 @@ snapshots:
 
   '@types/parse-json@4.0.2': {}
 
-  '@types/phoenix@1.6.5': {}
-
   '@types/prop-types@15.7.13': {}
 
   '@types/react-dom@18.3.0':
@@ -3837,10 +3725,6 @@ snapshots:
       csstype: 3.1.3
 
   '@types/tinycolor2@1.4.6': {}
-
-  '@types/ws@8.5.12':
-    dependencies:
-      '@types/node': 22.5.5
 
   '@typescript-eslint/eslint-plugin@8.6.0(@typescript-eslint/parser@8.6.0(eslint@9.11.0(jiti@1.21.6))(typescript@5.6.2))(eslint@9.11.0(jiti@1.21.6))(typescript@5.6.2)':
     dependencies:
@@ -4915,12 +4799,6 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prop-types@15.8.1:
-    dependencies:
-      loose-envify: 1.4.0
-      object-assign: 4.1.1
-      react-is: 16.13.1
-
   proxy-from-env@1.1.0: {}
 
   psl@1.9.0:
@@ -5242,7 +5120,8 @@ snapshots:
       url-parse: 1.5.10
     optional: true
 
-  tr46@0.0.3: {}
+  tr46@0.0.3:
+    optional: true
 
   tr46@3.0.0:
     dependencies:
@@ -5330,7 +5209,8 @@ snapshots:
       xml-name-validator: 4.0.0
     optional: true
 
-  webidl-conversions@3.0.1: {}
+  webidl-conversions@3.0.1:
+    optional: true
 
   webidl-conversions@7.0.0:
     optional: true
@@ -5353,6 +5233,7 @@ snapshots:
     dependencies:
       tr46: 0.0.3
       webidl-conversions: 3.0.1
+    optional: true
 
   which@2.0.2:
     dependencies:
@@ -5380,7 +5261,8 @@ snapshots:
   wrappy@1.0.2:
     optional: true
 
-  ws@8.18.0: {}
+  ws@8.18.0:
+    optional: true
 
   xml-name-validator@4.0.0:
     optional: true
