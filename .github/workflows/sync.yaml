@@ -1,24 +1,27 @@
 name: Sync
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
-  workflow_dispatch:
 
 permissions:
+  id-token: write
   contents: write
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: aws-actions/configure-aws-credentials@v1
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Connect to AWS
+        uses: aws-actions/configure-aws-credentials@v1
         with:
           role-session-name: awssyncsession
           role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: sync bucket
-        run: aws s3 sync ./build/ s3://${{ secrets.AWS_BUCKET_NAME }} --delete
+        run: aws s3 sync ./dist/ s3://${{ secrets.AWS_BUCKET_NAME }} --delete
